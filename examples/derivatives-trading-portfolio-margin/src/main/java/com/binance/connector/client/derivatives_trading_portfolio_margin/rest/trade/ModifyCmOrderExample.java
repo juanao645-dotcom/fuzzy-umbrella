@@ -1,0 +1,56 @@
+package com.binance.connector.client.derivatives_trading_portfolio_margin.rest.trade;
+
+import com.binance.connector.client.common.ApiException;
+import com.binance.connector.client.common.ApiResponse;
+import com.binance.connector.client.common.configuration.ClientConfiguration;
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.derivatives_trading_portfolio_margin.rest.DerivativesTradingPortfolioMarginRestApiUtil;
+import com.binance.connector.client.derivatives_trading_portfolio_margin.rest.api.DerivativesTradingPortfolioMarginRestApi;
+import com.binance.connector.client.derivatives_trading_portfolio_margin.rest.model.ModifyCmOrderRequest;
+import com.binance.connector.client.derivatives_trading_portfolio_margin.rest.model.ModifyCmOrderResponse;
+import com.binance.connector.client.derivatives_trading_portfolio_margin.rest.model.Side;
+import java.io.IOException;
+
+/** API examples for TradeApi */
+public class ModifyCmOrderExample {
+    private DerivativesTradingPortfolioMarginRestApi api;
+
+    public DerivativesTradingPortfolioMarginRestApi getApi() {
+        if (api == null) {
+            ClientConfiguration clientConfiguration =
+                    DerivativesTradingPortfolioMarginRestApiUtil.getClientConfiguration();
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new DerivativesTradingPortfolioMarginRestApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Modify CM Order (TRADE)
+     *
+     * <p>Order modify function, currently only LIMIT order modification is supported, modified
+     * orders will be reordered in the match queue Weight(IP): 1 Security Type: TRADE Notes: -
+     * Either &#x60;orderId&#x60; or &#x60;origClientOrderId&#x60; must be sent, and the
+     * &#x60;orderId&#x60; will prevail if both are sent. - Both &#x60;quantity&#x60; and
+     * &#x60;price&#x60; must be sent - When the new &#x60;quantity&#x60; or &#x60;price&#x60;
+     * doesn&#39;t satisfy PRICE_FILTER / PERCENT_FILTER / LOT_SIZE, amendment will be rejected and
+     * the order will stay as it is. - However the order will be cancelled by the amendment in the
+     * following situations: - when the order is in partially filled status and the new
+     * &#x60;quantity&#x60; &lt;&#x3D; &#x60;executedQty&#x60; - When the order is &#x60;GTX&#x60;
+     * and the new price will cause it to be executed immediately
+     *
+     * @throws ApiException if the Api call fails
+     */
+    public void modifyCmOrderExample() throws ApiException, IOException {
+        ModifyCmOrderRequest modifyCmOrderRequest = new ModifyCmOrderRequest();
+        modifyCmOrderRequest.symbol("BTCUSD_PERP");
+        modifyCmOrderRequest.side(Side.BUY);
+        modifyCmOrderRequest.quantity(1.0d);
+        modifyCmOrderRequest.price(1.0d);
+        ApiResponse<ModifyCmOrderResponse> response = getApi().modifyCmOrder(modifyCmOrderRequest);
+        System.out.println(response.getData());
+    }
+}

@@ -1,0 +1,48 @@
+package com.binance.connector.client.wallet.rest.account;
+
+import com.binance.connector.client.common.ApiException;
+import com.binance.connector.client.common.ApiResponse;
+import com.binance.connector.client.common.configuration.ClientConfiguration;
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.wallet.rest.WalletRestApiUtil;
+import com.binance.connector.client.wallet.rest.api.WalletRestApi;
+import com.binance.connector.client.wallet.rest.model.DailyAccountSnapshotResponse;
+import com.binance.connector.client.wallet.rest.model.OrderType;
+import java.io.IOException;
+
+/** API examples for AccountApi */
+public class DailyAccountSnapshotExample {
+    private WalletRestApi api;
+
+    public WalletRestApi getApi() {
+        if (api == null) {
+            ClientConfiguration clientConfiguration = WalletRestApiUtil.getClientConfiguration();
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new WalletRestApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Daily Account Snapshot (USER_DATA)
+     *
+     * <p>Daily account snapshot Weight(IP): 2400 Security Type: USER_DATA Notes: - The query time
+     * period must be less then 30 days - Support query within the last one month only - If
+     * startTimeand endTime not sent, return records of the last 7 days by default
+     *
+     * @throws ApiException if the Api call fails
+     */
+    public void dailyAccountSnapshotExample() throws ApiException, IOException {
+        OrderType type = OrderType.DELEGATE;
+        Long startTime = 1623319461670L;
+        Long endTime = 1641782889000L;
+        Long limit = 7L;
+        Long recvWindow = 5000L;
+        ApiResponse<DailyAccountSnapshotResponse> response =
+                getApi().dailyAccountSnapshot(type, startTime, endTime, limit, recvWindow);
+        System.out.println(response.getData());
+    }
+}

@@ -1,0 +1,66 @@
+package com.binance.connector.client.spot.websocket.api.market;
+
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.common.websocket.configuration.WebSocketClientConfiguration;
+import com.binance.connector.client.spot.websocket.api.SpotWebSocketApiUtil;
+import com.binance.connector.client.spot.websocket.api.api.SpotWebSocketApi;
+import com.binance.connector.client.spot.websocket.api.model.TradesHistoricalRequest;
+import com.binance.connector.client.spot.websocket.api.model.TradesHistoricalResponse;
+import java.util.concurrent.CompletableFuture;
+
+/** API examples for MarketApi */
+public class TradesHistoricalExample {
+    private SpotWebSocketApi api;
+
+    public SpotWebSocketApi getApi() {
+        if (api == null) {
+            WebSocketClientConfiguration clientConfiguration =
+                    SpotWebSocketApiUtil.getClientConfiguration();
+            // if you want the connection to be auto logged on:
+            // https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/authentication-requests
+            clientConfiguration.setAutoLogon(true);
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("/path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new SpotWebSocketApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Historical trades
+     *
+     * <p>Get historical trades. Weight(IP): 25 Security Type: NONE Notes: **Data Source:** Database
+     * Notes: * If &#x60;fromId&#x60; is not specified, the most recent trades are returned.
+     */
+    public void tradesHistoricalExampleAsync() {
+        TradesHistoricalRequest tradesHistoricalRequest = new TradesHistoricalRequest();
+        tradesHistoricalRequest.symbol("BNBUSDT");
+        CompletableFuture<TradesHistoricalResponse> future =
+                getApi().tradesHistorical(tradesHistoricalRequest);
+        future.handle(
+                (response, error) -> {
+                    if (error != null) {
+                        System.err.println(error);
+                    }
+                    System.out.println(response);
+                    return response;
+                });
+    }
+
+    /**
+     * Historical trades
+     *
+     * <p>Get historical trades. Weight(IP): 25 Security Type: NONE Notes: **Data Source:** Database
+     * Notes: * If &#x60;fromId&#x60; is not specified, the most recent trades are returned.
+     */
+    public void tradesHistoricalExampleSync() {
+        TradesHistoricalRequest tradesHistoricalRequest = new TradesHistoricalRequest();
+        tradesHistoricalRequest.symbol("BNBUSDT");
+        CompletableFuture<TradesHistoricalResponse> future =
+                getApi().tradesHistorical(tradesHistoricalRequest);
+        TradesHistoricalResponse response = future.join();
+        System.out.println(response);
+    }
+}

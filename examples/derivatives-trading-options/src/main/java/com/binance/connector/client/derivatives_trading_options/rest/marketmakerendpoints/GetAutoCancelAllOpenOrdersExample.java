@@ -1,0 +1,47 @@
+package com.binance.connector.client.derivatives_trading_options.rest.marketmakerendpoints;
+
+import com.binance.connector.client.common.ApiException;
+import com.binance.connector.client.common.ApiResponse;
+import com.binance.connector.client.common.configuration.ClientConfiguration;
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.derivatives_trading_options.rest.DerivativesTradingOptionsRestApiUtil;
+import com.binance.connector.client.derivatives_trading_options.rest.api.DerivativesTradingOptionsRestApi;
+import com.binance.connector.client.derivatives_trading_options.rest.model.GetAutoCancelAllOpenOrdersResponse;
+import java.io.IOException;
+
+/** API examples for MarketMakerEndpointsApi */
+public class GetAutoCancelAllOpenOrdersExample {
+    private DerivativesTradingOptionsRestApi api;
+
+    public DerivativesTradingOptionsRestApi getApi() {
+        if (api == null) {
+            ClientConfiguration clientConfiguration =
+                    DerivativesTradingOptionsRestApiUtil.getClientConfiguration();
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new DerivativesTradingOptionsRestApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Get Auto-Cancel All Open Orders (Kill-Switch) Config (TRADE)
+     *
+     * <p>This endpoint returns the auto-cancel parameters for each underlying symbol. Note only
+     * active auto-cancel parameters will be returned, if countdownTime is set to 0 (ie.
+     * countdownTime has been turned off), the underlying symbol and corresponding countdownTime
+     * parameter will not be returned in the response. Weight(IP): 1 Security Type: TRADE Notes: -
+     * countdownTime &#x3D; 0 means the function is disabled.
+     *
+     * @throws ApiException if the Api call fails
+     */
+    public void getAutoCancelAllOpenOrdersExample() throws ApiException, IOException {
+        String underlying = "BTCUSDT";
+        Long recvWindow = 5000L;
+        ApiResponse<GetAutoCancelAllOpenOrdersResponse> response =
+                getApi().getAutoCancelAllOpenOrders(underlying, recvWindow);
+        System.out.println(response.getData());
+    }
+}
