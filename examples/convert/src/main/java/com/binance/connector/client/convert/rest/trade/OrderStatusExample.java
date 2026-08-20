@@ -1,0 +1,41 @@
+package com.binance.connector.client.convert.rest.trade;
+
+import com.binance.connector.client.common.ApiException;
+import com.binance.connector.client.common.ApiResponse;
+import com.binance.connector.client.common.configuration.ClientConfiguration;
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.convert.rest.ConvertRestApiUtil;
+import com.binance.connector.client.convert.rest.api.ConvertRestApi;
+import com.binance.connector.client.convert.rest.model.OrderStatusResponse;
+import java.io.IOException;
+
+/** API examples for TradeApi */
+public class OrderStatusExample {
+    private ConvertRestApi api;
+
+    public ConvertRestApi getApi() {
+        if (api == null) {
+            ClientConfiguration clientConfiguration = ConvertRestApiUtil.getClientConfiguration();
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new ConvertRestApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Order status (USER_DATA)
+     *
+     * <p>Query order status by order ID. Weight(UID): 100 Security Type: USER_DATA
+     *
+     * @throws ApiException if the Api call fails
+     */
+    public void orderStatusExample() throws ApiException, IOException {
+        String orderId = "1";
+        String quoteId = "1";
+        ApiResponse<OrderStatusResponse> response = getApi().orderStatus(orderId, quoteId);
+        System.out.println(response.getData());
+    }
+}

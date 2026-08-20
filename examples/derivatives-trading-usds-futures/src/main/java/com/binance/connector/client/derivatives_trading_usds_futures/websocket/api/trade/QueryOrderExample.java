@@ -1,0 +1,72 @@
+package com.binance.connector.client.derivatives_trading_usds_futures.websocket.api.trade;
+
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.common.websocket.configuration.WebSocketClientConfiguration;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.api.DerivativesTradingUsdsFuturesWebSocketApiUtil;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.api.api.DerivativesTradingUsdsFuturesWebSocketApi;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.api.model.QueryOrderRequest;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.api.model.QueryOrderResponse;
+import java.util.concurrent.CompletableFuture;
+
+/** API examples for TradeApi */
+public class QueryOrderExample {
+    private DerivativesTradingUsdsFuturesWebSocketApi api;
+
+    public DerivativesTradingUsdsFuturesWebSocketApi getApi() {
+        if (api == null) {
+            WebSocketClientConfiguration clientConfiguration =
+                    DerivativesTradingUsdsFuturesWebSocketApiUtil.getClientConfiguration();
+            // if you want the connection to be auto logged on:
+            // https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/authentication-requests
+            clientConfiguration.setAutoLogon(true);
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("/path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new DerivativesTradingUsdsFuturesWebSocketApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Query Order (USER_DATA)
+     *
+     * <p>Check an order&#39;s status. * These orders will not be found: * order status is
+     * &#x60;CANCELED&#x60; or &#x60;EXPIRED&#x60; **AND** order has NO filled trade **AND** created
+     * time + 3 days &lt; current time * order create time + 90 days &lt; current time Weight(IP): 1
+     * Security Type: USER_DATA Notes: Notes: - Either &#x60;orderId&#x60; or
+     * &#x60;origClientOrderId&#x60; must be sent. - &#x60;orderId&#x60; is self-increment for each
+     * specific &#x60;symbol&#x60;
+     */
+    public void queryOrderExampleAsync() {
+        QueryOrderRequest queryOrderRequest = new QueryOrderRequest();
+        queryOrderRequest.symbol("BTCUSDT");
+        CompletableFuture<QueryOrderResponse> future = getApi().queryOrder(queryOrderRequest);
+        future.handle(
+                (response, error) -> {
+                    if (error != null) {
+                        System.err.println(error);
+                    }
+                    System.out.println(response);
+                    return response;
+                });
+    }
+
+    /**
+     * Query Order (USER_DATA)
+     *
+     * <p>Check an order&#39;s status. * These orders will not be found: * order status is
+     * &#x60;CANCELED&#x60; or &#x60;EXPIRED&#x60; **AND** order has NO filled trade **AND** created
+     * time + 3 days &lt; current time * order create time + 90 days &lt; current time Weight(IP): 1
+     * Security Type: USER_DATA Notes: Notes: - Either &#x60;orderId&#x60; or
+     * &#x60;origClientOrderId&#x60; must be sent. - &#x60;orderId&#x60; is self-increment for each
+     * specific &#x60;symbol&#x60;
+     */
+    public void queryOrderExampleSync() {
+        QueryOrderRequest queryOrderRequest = new QueryOrderRequest();
+        queryOrderRequest.symbol("BTCUSDT");
+        CompletableFuture<QueryOrderResponse> future = getApi().queryOrder(queryOrderRequest);
+        QueryOrderResponse response = future.join();
+        System.out.println(response);
+    }
+}

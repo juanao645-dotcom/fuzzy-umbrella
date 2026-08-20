@@ -1,0 +1,54 @@
+package com.binance.connector.client.derivatives_trading_usds_futures.rest.account;
+
+import com.binance.connector.client.common.ApiException;
+import com.binance.connector.client.common.ApiResponse;
+import com.binance.connector.client.common.configuration.ClientConfiguration;
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.derivatives_trading_usds_futures.rest.DerivativesTradingUsdsFuturesRestApiUtil;
+import com.binance.connector.client.derivatives_trading_usds_futures.rest.api.DerivativesTradingUsdsFuturesRestApi;
+import com.binance.connector.client.derivatives_trading_usds_futures.rest.model.GetIncomeHistoryResponse;
+import com.binance.connector.client.derivatives_trading_usds_futures.rest.model.IncomeType;
+import java.io.IOException;
+
+/** API examples for AccountApi */
+public class GetIncomeHistoryExample {
+    private DerivativesTradingUsdsFuturesRestApi api;
+
+    public DerivativesTradingUsdsFuturesRestApi getApi() {
+        if (api == null) {
+            ClientConfiguration clientConfiguration =
+                    DerivativesTradingUsdsFuturesRestApiUtil.getClientConfiguration();
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new DerivativesTradingUsdsFuturesRestApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Get Income History (USER_DATA)
+     *
+     * <p>Query income history Weight(IP): 30 Security Type: USER_DATA Notes: - If &#x60;incomeType
+     * &#x60; is not sent, all kinds of flow will be returned - If &#x60;startTime&#x60; and
+     * &#x60;endTime&#x60; are not sent, the recent 7-day data will be returned. -
+     * &#x60;trandId&#x60; is unique in the same &#x60;incomeType&#x60; for a user. - Income history
+     * only contains data for the last three months.
+     *
+     * @throws ApiException if the Api call fails
+     */
+    public void getIncomeHistoryExample() throws ApiException, IOException {
+        String symbol = "BTCUSDT";
+        IncomeType incomeType = IncomeType.TRANSFER;
+        Long startTime = 1623319461670L;
+        Long endTime = 1641782889000L;
+        Long page = 1L;
+        Long limit = 30L;
+        Long recvWindow = 5000L;
+        ApiResponse<GetIncomeHistoryResponse> response =
+                getApi().getIncomeHistory(
+                                symbol, incomeType, startTime, endTime, page, limit, recvWindow);
+        System.out.println(response.getData());
+    }
+}

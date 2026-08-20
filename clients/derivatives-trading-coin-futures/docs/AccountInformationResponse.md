@@ -1,0 +1,16 @@
+
+
+# AccountInformationResponse
+
+
+## Properties
+
+| Name | Type | Description | Notes |
+|------------ | ------------- | ------------- | -------------|
+|**id** | **String** | positionId |  [optional] |
+|**status** | **Long** | Enum：completed，processing |  [optional] |
+|**result** | [**AccountInformationResponseResult**](AccountInformationResponseResult.md) |  |  [optional] |
+|**rateLimits** | [**List&lt;AccountInformationResponseRateLimitsInner&gt;**](AccountInformationResponseRateLimitsInner.md) | Rate limit definitions. |  [optional] |
+
+
+

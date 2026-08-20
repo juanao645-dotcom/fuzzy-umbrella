@@ -1,0 +1,43 @@
+package com.binance.connector.client.wallet.rest.account;
+
+import com.binance.connector.client.common.ApiException;
+import com.binance.connector.client.common.configuration.ClientConfiguration;
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.wallet.rest.WalletRestApiUtil;
+import com.binance.connector.client.wallet.rest.api.WalletRestApi;
+import com.binance.connector.client.wallet.rest.model.EnableFastWithdrawSwitchRequest;
+import java.io.IOException;
+
+/** API examples for AccountApi */
+public class EnableFastWithdrawSwitchExample {
+    private WalletRestApi api;
+
+    public WalletRestApi getApi() {
+        if (api == null) {
+            ClientConfiguration clientConfiguration = WalletRestApiUtil.getClientConfiguration();
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new WalletRestApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Enable Fast Withdraw Switch (USER_DATA)
+     *
+     * <p>Enable Fast Withdraw Switch (USER_DATA) Weight(IP): 1 Security Type: USER_DATA Notes: -
+     * This request will enable fastwithdraw switch under your account. You need to enable
+     * \&quot;trade\&quot; option for the api key which requests this endpoint. - When Fast Withdraw
+     * Switch is on, transferring funds to a Binance account will be done instantly. There is no
+     * on-chain transaction, no transaction ID and no withdrawal fee.
+     *
+     * @throws ApiException if the Api call fails
+     */
+    public void enableFastWithdrawSwitchExample() throws ApiException, IOException {
+        EnableFastWithdrawSwitchRequest enableFastWithdrawSwitchRequest =
+                new EnableFastWithdrawSwitchRequest();
+        getApi().enableFastWithdrawSwitch(enableFastWithdrawSwitchRequest);
+    }
+}

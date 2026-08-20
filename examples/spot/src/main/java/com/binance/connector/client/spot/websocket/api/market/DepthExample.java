@@ -1,0 +1,76 @@
+package com.binance.connector.client.spot.websocket.api.market;
+
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.common.websocket.configuration.WebSocketClientConfiguration;
+import com.binance.connector.client.spot.websocket.api.SpotWebSocketApiUtil;
+import com.binance.connector.client.spot.websocket.api.api.SpotWebSocketApi;
+import com.binance.connector.client.spot.websocket.api.model.DepthRequest;
+import com.binance.connector.client.spot.websocket.api.model.DepthResponse;
+import java.util.concurrent.CompletableFuture;
+
+/** API examples for MarketApi */
+public class DepthExample {
+    private SpotWebSocketApi api;
+
+    public SpotWebSocketApi getApi() {
+        if (api == null) {
+            WebSocketClientConfiguration clientConfiguration =
+                    SpotWebSocketApiUtil.getClientConfiguration();
+            // if you want the connection to be auto logged on:
+            // https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/authentication-requests
+            clientConfiguration.setAutoLogon(true);
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("/path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new SpotWebSocketApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Order book
+     *
+     * <p>Get current order book. Note that this request returns limited market depth. If you need
+     * to continuously monitor order book updates, please consider using WebSocket Streams: *
+     * &#x60;&lt;symbol&gt;@depth&lt;levels&gt;&#x60; * &#x60;&lt;symbol&gt;@depth&#x60; You can use
+     * &#x60;depth&#x60; request together with &#x60;&lt;symbol&gt;@depth&#x60; streams to [maintain
+     * a local order
+     * book](/products/spot/web-socket-streams#how-to-manage-a-local-order-book-correctly). Weight:
+     * Adjusted based on the limit: |Limit|Request Weight ------|------- 1-100| 5 101-500| 25
+     * 501-1000| 50 1001-5000| 250 Security Type: NONE Notes: **Data Source:** Memory
+     */
+    public void depthExampleAsync() {
+        DepthRequest depthRequest = new DepthRequest();
+        depthRequest.symbol("BNBUSDT");
+        CompletableFuture<DepthResponse> future = getApi().depth(depthRequest);
+        future.handle(
+                (response, error) -> {
+                    if (error != null) {
+                        System.err.println(error);
+                    }
+                    System.out.println(response);
+                    return response;
+                });
+    }
+
+    /**
+     * Order book
+     *
+     * <p>Get current order book. Note that this request returns limited market depth. If you need
+     * to continuously monitor order book updates, please consider using WebSocket Streams: *
+     * &#x60;&lt;symbol&gt;@depth&lt;levels&gt;&#x60; * &#x60;&lt;symbol&gt;@depth&#x60; You can use
+     * &#x60;depth&#x60; request together with &#x60;&lt;symbol&gt;@depth&#x60; streams to [maintain
+     * a local order
+     * book](/products/spot/web-socket-streams#how-to-manage-a-local-order-book-correctly). Weight:
+     * Adjusted based on the limit: |Limit|Request Weight ------|------- 1-100| 5 101-500| 25
+     * 501-1000| 50 1001-5000| 250 Security Type: NONE Notes: **Data Source:** Memory
+     */
+    public void depthExampleSync() {
+        DepthRequest depthRequest = new DepthRequest();
+        depthRequest.symbol("BNBUSDT");
+        CompletableFuture<DepthResponse> future = getApi().depth(depthRequest);
+        DepthResponse response = future.join();
+        System.out.println(response);
+    }
+}
