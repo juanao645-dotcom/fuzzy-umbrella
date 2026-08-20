@@ -1,0 +1,813 @@
+# MarketDataApi
+
+All URIs are relative to *https://api.binance.com*
+
+| Method | HTTP request | Description |
+|------------- | ------------- | -------------|
+| [**crossMarginCollateralRatio**](MarketDataApi.md#crossMarginCollateralRatio) | **GET** /sapi/v1/margin/crossMarginCollateralRatio | Cross margin collateral ratio (MARKET_DATA) |
+| [**getAllCrossMarginPairs**](MarketDataApi.md#getAllCrossMarginPairs) | **GET** /sapi/v1/margin/allPairs | Get All Cross Margin Pairs (MARKET_DATA) |
+| [**getAllIsolatedMarginSymbol**](MarketDataApi.md#getAllIsolatedMarginSymbol) | **GET** /sapi/v1/margin/isolated/allPairs | Get All Isolated Margin Symbol (MARKET_DATA) |
+| [**getAllMarginAssets**](MarketDataApi.md#getAllMarginAssets) | **GET** /sapi/v1/margin/allAssets | Get All Margin Assets (MARKET_DATA) |
+| [**getDelistSchedule**](MarketDataApi.md#getDelistSchedule) | **GET** /sapi/v1/margin/delist-schedule | Get Delist Schedule (MARKET_DATA) |
+| [**getLimitPricePairs**](MarketDataApi.md#getLimitPricePairs) | **GET** /sapi/v1/margin/limit-price-pairs | Get Limit Price Pairs (MARKET_DATA) |
+| [**getListSchedule**](MarketDataApi.md#getListSchedule) | **GET** /sapi/v1/margin/list-schedule | Get list Schedule (MARKET_DATA) |
+| [**getMarginAssetRiskBasedLiquidationRatio**](MarketDataApi.md#getMarginAssetRiskBasedLiquidationRatio) | **GET** /sapi/v1/margin/risk-based-liquidation-ratio | Get Margin Asset Risk-Based Liquidation Ratio (MARKET_DATA) |
+| [**getMarginRestrictedAssets**](MarketDataApi.md#getMarginRestrictedAssets) | **GET** /sapi/v1/margin/restricted-asset | Get Margin Restricted Assets (MARKET_DATA) |
+| [**queryIsolatedMarginTierData**](MarketDataApi.md#queryIsolatedMarginTierData) | **GET** /sapi/v1/margin/isolatedMarginTier | Query Isolated Margin Tier Data (USER_DATA) |
+| [**queryLiabilityCoinLeverageBracketInCrossMarginProMode**](MarketDataApi.md#queryLiabilityCoinLeverageBracketInCrossMarginProMode) | **GET** /sapi/v1/margin/leverageBracket | Query Liability Coin Leverage Bracket in Cross Margin Pro Mode (MARKET_DATA) |
+| [**queryMarginAvailableInventory**](MarketDataApi.md#queryMarginAvailableInventory) | **GET** /sapi/v1/margin/available-inventory | Query Margin Available Inventory (USER_DATA) |
+| [**queryMarginPriceindex**](MarketDataApi.md#queryMarginPriceindex) | **GET** /sapi/v1/margin/priceIndex | Query Margin PriceIndex (MARKET_DATA) |
+
+
+<a id="crossMarginCollateralRatio"></a>
+# **crossMarginCollateralRatio**
+> CrossMarginCollateralRatioResponse crossMarginCollateralRatio()
+
+Cross margin collateral ratio (MARKET_DATA)
+
+Cross margin collateral ratio  Weight(IP): 100  Security Type: MARKET_DATA
+
+### Example
+```java
+// Import classes:
+import com.binance.connector.client.margin_trading.ApiClient;
+import com.binance.connector.client.margin_trading.ApiException;
+import com.binance.connector.client.margin_trading.Configuration;
+import com.binance.connector.client.margin_trading.models.*;
+import com.binance.connector.client.margin_trading.rest.api.MarketDataApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("https://api.binance.com");
+
+    MarketDataApi apiInstance = new MarketDataApi(defaultClient);
+    try {
+      CrossMarginCollateralRatioResponse result = apiInstance.crossMarginCollateralRatio();
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling MarketDataApi#crossMarginCollateralRatio");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**CrossMarginCollateralRatioResponse**](CrossMarginCollateralRatioResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/x-www-form-urlencoded
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Cross margin collateral ratio |  -  |
+
+<a id="getAllCrossMarginPairs"></a>
+# **getAllCrossMarginPairs**
+> GetAllCrossMarginPairsResponse getAllCrossMarginPairs(symbol)
+
+Get All Cross Margin Pairs (MARKET_DATA)
+
+Get All Cross Margin Pairs  Weight(IP): 1  Security Type: MARKET_DATA
+
+### Example
+```java
+// Import classes:
+import com.binance.connector.client.margin_trading.ApiClient;
+import com.binance.connector.client.margin_trading.ApiException;
+import com.binance.connector.client.margin_trading.Configuration;
+import com.binance.connector.client.margin_trading.models.*;
+import com.binance.connector.client.margin_trading.rest.api.MarketDataApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("https://api.binance.com");
+
+    MarketDataApi apiInstance = new MarketDataApi(defaultClient);
+    String symbol = "BNBBTC"; // String | 
+    try {
+      GetAllCrossMarginPairsResponse result = apiInstance.getAllCrossMarginPairs(symbol);
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling MarketDataApi#getAllCrossMarginPairs");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **symbol** | **String**|  | [optional] |
+
+### Return type
+
+[**GetAllCrossMarginPairsResponse**](GetAllCrossMarginPairsResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/x-www-form-urlencoded
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Get All Cross Margin Pairs |  -  |
+
+<a id="getAllIsolatedMarginSymbol"></a>
+# **getAllIsolatedMarginSymbol**
+> GetAllIsolatedMarginSymbolResponse getAllIsolatedMarginSymbol(symbol, recvWindow)
+
+Get All Isolated Margin Symbol (MARKET_DATA)
+
+Get All Isolated Margin Symbol  Weight(IP): 10  Security Type: MARKET_DATA
+
+### Example
+```java
+// Import classes:
+import com.binance.connector.client.margin_trading.ApiClient;
+import com.binance.connector.client.margin_trading.ApiException;
+import com.binance.connector.client.margin_trading.Configuration;
+import com.binance.connector.client.margin_trading.models.*;
+import com.binance.connector.client.margin_trading.rest.api.MarketDataApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("https://api.binance.com");
+
+    MarketDataApi apiInstance = new MarketDataApi(defaultClient);
+    String symbol = "BNBBTC"; // String | 
+    Long recvWindow = 5000L; // Long | 
+    try {
+      GetAllIsolatedMarginSymbolResponse result = apiInstance.getAllIsolatedMarginSymbol(symbol, recvWindow);
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling MarketDataApi#getAllIsolatedMarginSymbol");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **symbol** | **String**|  | [optional] |
+| **recvWindow** | **Long**|  | [optional] |
+
+### Return type
+
+[**GetAllIsolatedMarginSymbolResponse**](GetAllIsolatedMarginSymbolResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/x-www-form-urlencoded
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Get All Isolated Margin Symbol |  -  |
+
+<a id="getAllMarginAssets"></a>
+# **getAllMarginAssets**
+> GetAllMarginAssetsResponse getAllMarginAssets(asset)
+
+Get All Margin Assets (MARKET_DATA)
+
+Get All Margin Assets.  Weight(IP): 1  Security Type: MARKET_DATA
+
+### Example
+```java
+// Import classes:
+import com.binance.connector.client.margin_trading.ApiClient;
+import com.binance.connector.client.margin_trading.ApiException;
+import com.binance.connector.client.margin_trading.Configuration;
+import com.binance.connector.client.margin_trading.models.*;
+import com.binance.connector.client.margin_trading.rest.api.MarketDataApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("https://api.binance.com");
+
+    MarketDataApi apiInstance = new MarketDataApi(defaultClient);
+    String asset = "USDC"; // String | 
+    try {
+      GetAllMarginAssetsResponse result = apiInstance.getAllMarginAssets(asset);
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling MarketDataApi#getAllMarginAssets");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **asset** | **String**|  | [optional] |
+
+### Return type
+
+[**GetAllMarginAssetsResponse**](GetAllMarginAssetsResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/x-www-form-urlencoded
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Get All Margin Assets |  -  |
+
+<a id="getDelistSchedule"></a>
+# **getDelistSchedule**
+> GetDelistScheduleResponse getDelistSchedule(recvWindow)
+
+Get Delist Schedule (MARKET_DATA)
+
+Get tokens or symbols delist schedule for cross margin and isolated margin  Weight(IP): 100  Security Type: MARKET_DATA
+
+### Example
+```java
+// Import classes:
+import com.binance.connector.client.margin_trading.ApiClient;
+import com.binance.connector.client.margin_trading.ApiException;
+import com.binance.connector.client.margin_trading.Configuration;
+import com.binance.connector.client.margin_trading.models.*;
+import com.binance.connector.client.margin_trading.rest.api.MarketDataApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("https://api.binance.com");
+
+    MarketDataApi apiInstance = new MarketDataApi(defaultClient);
+    Long recvWindow = 5000L; // Long | 
+    try {
+      GetDelistScheduleResponse result = apiInstance.getDelistSchedule(recvWindow);
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling MarketDataApi#getDelistSchedule");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **recvWindow** | **Long**|  | [optional] |
+
+### Return type
+
+[**GetDelistScheduleResponse**](GetDelistScheduleResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/x-www-form-urlencoded
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Get Delist Schedule |  -  |
+
+<a id="getLimitPricePairs"></a>
+# **getLimitPricePairs**
+> GetLimitPricePairsResponse getLimitPricePairs()
+
+Get Limit Price Pairs (MARKET_DATA)
+
+Query trading pairs with restriction on limit price range.  In margin trading, you can place orders with limit price. Limit price should be within (-15%, 15%) of current index price for a list of margin trading pairs. This rule only impacts limit sell orders with limit price that is lower than current index price and limit buy orders with limit price that is higher than current index price.  - Buy order: Your order will be rejected with an error message notification if the limit price is 15% above the index price.  - Sell order: Your order will be rejected with an error message notification if the limit price is 15% below the index price.  Please review the limit price order placing strategy, backtest and calibrate the planned order size with the trading volume and order book depth to prevent trading loss.  Weight(IP): 1  Security Type: MARKET_DATA
+
+### Example
+```java
+// Import classes:
+import com.binance.connector.client.margin_trading.ApiClient;
+import com.binance.connector.client.margin_trading.ApiException;
+import com.binance.connector.client.margin_trading.Configuration;
+import com.binance.connector.client.margin_trading.models.*;
+import com.binance.connector.client.margin_trading.rest.api.MarketDataApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("https://api.binance.com");
+
+    MarketDataApi apiInstance = new MarketDataApi(defaultClient);
+    try {
+      GetLimitPricePairsResponse result = apiInstance.getLimitPricePairs();
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling MarketDataApi#getLimitPricePairs");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**GetLimitPricePairsResponse**](GetLimitPricePairsResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/x-www-form-urlencoded
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Get Limit Price Pairs |  -  |
+
+<a id="getListSchedule"></a>
+# **getListSchedule**
+> GetListScheduleResponse getListSchedule(recvWindow)
+
+Get list Schedule (MARKET_DATA)
+
+Get the upcoming tokens or symbols listing schedule for Cross Margin and Isolated Margin.  Weight(IP): 100  Security Type: MARKET_DATA
+
+### Example
+```java
+// Import classes:
+import com.binance.connector.client.margin_trading.ApiClient;
+import com.binance.connector.client.margin_trading.ApiException;
+import com.binance.connector.client.margin_trading.Configuration;
+import com.binance.connector.client.margin_trading.models.*;
+import com.binance.connector.client.margin_trading.rest.api.MarketDataApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("https://api.binance.com");
+
+    MarketDataApi apiInstance = new MarketDataApi(defaultClient);
+    Long recvWindow = 5000L; // Long | 
+    try {
+      GetListScheduleResponse result = apiInstance.getListSchedule(recvWindow);
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling MarketDataApi#getListSchedule");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **recvWindow** | **Long**|  | [optional] |
+
+### Return type
+
+[**GetListScheduleResponse**](GetListScheduleResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/x-www-form-urlencoded
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Get list Schedule |  -  |
+
+<a id="getMarginAssetRiskBasedLiquidationRatio"></a>
+# **getMarginAssetRiskBasedLiquidationRatio**
+> GetMarginAssetRiskBasedLiquidationRatioResponse getMarginAssetRiskBasedLiquidationRatio()
+
+Get Margin Asset Risk-Based Liquidation Ratio (MARKET_DATA)
+
+Get Margin Asset Risk-Based Liquidation Ratio  Weight(IP): 1  Security Type: MARKET_DATA
+
+### Example
+```java
+// Import classes:
+import com.binance.connector.client.margin_trading.ApiClient;
+import com.binance.connector.client.margin_trading.ApiException;
+import com.binance.connector.client.margin_trading.Configuration;
+import com.binance.connector.client.margin_trading.models.*;
+import com.binance.connector.client.margin_trading.rest.api.MarketDataApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("https://api.binance.com");
+
+    MarketDataApi apiInstance = new MarketDataApi(defaultClient);
+    try {
+      GetMarginAssetRiskBasedLiquidationRatioResponse result = apiInstance.getMarginAssetRiskBasedLiquidationRatio();
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling MarketDataApi#getMarginAssetRiskBasedLiquidationRatio");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**GetMarginAssetRiskBasedLiquidationRatioResponse**](GetMarginAssetRiskBasedLiquidationRatioResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/x-www-form-urlencoded
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Get Margin Asset Risk-Based Liquidation Ratio |  -  |
+
+<a id="getMarginRestrictedAssets"></a>
+# **getMarginRestrictedAssets**
+> GetMarginRestrictedAssetsResponse getMarginRestrictedAssets()
+
+Get Margin Restricted Assets (MARKET_DATA)
+
+Get the list of margin-restricted assets.  Weight(IP): 1  Security Type: MARKET_DATA
+
+### Example
+```java
+// Import classes:
+import com.binance.connector.client.margin_trading.ApiClient;
+import com.binance.connector.client.margin_trading.ApiException;
+import com.binance.connector.client.margin_trading.Configuration;
+import com.binance.connector.client.margin_trading.models.*;
+import com.binance.connector.client.margin_trading.rest.api.MarketDataApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("https://api.binance.com");
+
+    MarketDataApi apiInstance = new MarketDataApi(defaultClient);
+    try {
+      GetMarginRestrictedAssetsResponse result = apiInstance.getMarginRestrictedAssets();
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling MarketDataApi#getMarginRestrictedAssets");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**GetMarginRestrictedAssetsResponse**](GetMarginRestrictedAssetsResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/x-www-form-urlencoded
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Get Margin Restricted Assets |  -  |
+
+<a id="queryIsolatedMarginTierData"></a>
+# **queryIsolatedMarginTierData**
+> QueryIsolatedMarginTierDataResponse queryIsolatedMarginTierData(symbol, tier, recvWindow)
+
+Query Isolated Margin Tier Data (USER_DATA)
+
+Get isolated margin tier data collection with any tier as https://www.binance.com/en/margin-data  Weight(IP): 1  Security Type: USER_DATA
+
+### Example
+```java
+// Import classes:
+import com.binance.connector.client.margin_trading.ApiClient;
+import com.binance.connector.client.margin_trading.ApiException;
+import com.binance.connector.client.margin_trading.Configuration;
+import com.binance.connector.client.margin_trading.models.*;
+import com.binance.connector.client.margin_trading.rest.api.MarketDataApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("https://api.binance.com");
+
+    MarketDataApi apiInstance = new MarketDataApi(defaultClient);
+    String symbol = "BTCUSDT"; // String | 
+    Long tier = 1L; // Long | 
+    Long recvWindow = 5000L; // Long | 
+    try {
+      QueryIsolatedMarginTierDataResponse result = apiInstance.queryIsolatedMarginTierData(symbol, tier, recvWindow);
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling MarketDataApi#queryIsolatedMarginTierData");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **symbol** | **String**|  | |
+| **tier** | **Long**|  | [optional] |
+| **recvWindow** | **Long**|  | [optional] |
+
+### Return type
+
+[**QueryIsolatedMarginTierDataResponse**](QueryIsolatedMarginTierDataResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/x-www-form-urlencoded
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Isolated Margin Tier Data |  -  |
+
+<a id="queryLiabilityCoinLeverageBracketInCrossMarginProMode"></a>
+# **queryLiabilityCoinLeverageBracketInCrossMarginProMode**
+> QueryLiabilityCoinLeverageBracketInCrossMarginProModeResponse queryLiabilityCoinLeverageBracketInCrossMarginProMode()
+
+Query Liability Coin Leverage Bracket in Cross Margin Pro Mode (MARKET_DATA)
+
+Liability Coin Leverage Bracket in Cross Margin Pro Mode  Weight(IP): 1  Security Type: MARKET_DATA
+
+### Example
+```java
+// Import classes:
+import com.binance.connector.client.margin_trading.ApiClient;
+import com.binance.connector.client.margin_trading.ApiException;
+import com.binance.connector.client.margin_trading.Configuration;
+import com.binance.connector.client.margin_trading.models.*;
+import com.binance.connector.client.margin_trading.rest.api.MarketDataApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("https://api.binance.com");
+
+    MarketDataApi apiInstance = new MarketDataApi(defaultClient);
+    try {
+      QueryLiabilityCoinLeverageBracketInCrossMarginProModeResponse result = apiInstance.queryLiabilityCoinLeverageBracketInCrossMarginProMode();
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling MarketDataApi#queryLiabilityCoinLeverageBracketInCrossMarginProMode");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**QueryLiabilityCoinLeverageBracketInCrossMarginProModeResponse**](QueryLiabilityCoinLeverageBracketInCrossMarginProModeResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/x-www-form-urlencoded
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Liability Coin Leverage Bracket in Cross Margin Pro Mode |  -  |
+
+<a id="queryMarginAvailableInventory"></a>
+# **queryMarginAvailableInventory**
+> QueryMarginAvailableInventoryResponse queryMarginAvailableInventory(type)
+
+Query Margin Available Inventory (USER_DATA)
+
+Margin available Inventory query  Weight(UID): 50  Security Type: USER_DATA
+
+### Example
+```java
+// Import classes:
+import com.binance.connector.client.margin_trading.ApiClient;
+import com.binance.connector.client.margin_trading.ApiException;
+import com.binance.connector.client.margin_trading.Configuration;
+import com.binance.connector.client.margin_trading.models.*;
+import com.binance.connector.client.margin_trading.rest.api.MarketDataApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("https://api.binance.com");
+
+    MarketDataApi apiInstance = new MarketDataApi(defaultClient);
+    OrderType type = OrderType.fromValue("ROLL_IN"); // OrderType | 
+    try {
+      QueryMarginAvailableInventoryResponse result = apiInstance.queryMarginAvailableInventory(type);
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling MarketDataApi#queryMarginAvailableInventory");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **type** | [**OrderType**](.md)|  | [enum: ROLL_IN, ROLL_OUT] |
+
+### Return type
+
+[**QueryMarginAvailableInventoryResponse**](QueryMarginAvailableInventoryResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/x-www-form-urlencoded
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Margin Available Inventory |  -  |
+
+<a id="queryMarginPriceindex"></a>
+# **queryMarginPriceindex**
+> QueryMarginPriceindexResponse queryMarginPriceindex(symbol)
+
+Query Margin PriceIndex (MARKET_DATA)
+
+Query Margin PriceIndex  Weight(IP): 10  Security Type: MARKET_DATA
+
+### Example
+```java
+// Import classes:
+import com.binance.connector.client.margin_trading.ApiClient;
+import com.binance.connector.client.margin_trading.ApiException;
+import com.binance.connector.client.margin_trading.Configuration;
+import com.binance.connector.client.margin_trading.models.*;
+import com.binance.connector.client.margin_trading.rest.api.MarketDataApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("https://api.binance.com");
+
+    MarketDataApi apiInstance = new MarketDataApi(defaultClient);
+    String symbol = "BNBBTC"; // String | 
+    try {
+      QueryMarginPriceindexResponse result = apiInstance.queryMarginPriceindex(symbol);
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling MarketDataApi#queryMarginPriceindex");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **symbol** | **String**|  | |
+
+### Return type
+
+[**QueryMarginPriceindexResponse**](QueryMarginPriceindexResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/x-www-form-urlencoded
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Margin PriceIndex |  -  |
+

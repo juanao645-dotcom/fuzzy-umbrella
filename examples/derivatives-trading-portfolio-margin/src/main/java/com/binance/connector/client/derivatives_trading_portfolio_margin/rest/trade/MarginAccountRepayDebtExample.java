@@ -1,0 +1,51 @@
+package com.binance.connector.client.derivatives_trading_portfolio_margin.rest.trade;
+
+import com.binance.connector.client.common.ApiException;
+import com.binance.connector.client.common.ApiResponse;
+import com.binance.connector.client.common.configuration.ClientConfiguration;
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.derivatives_trading_portfolio_margin.rest.DerivativesTradingPortfolioMarginRestApiUtil;
+import com.binance.connector.client.derivatives_trading_portfolio_margin.rest.api.DerivativesTradingPortfolioMarginRestApi;
+import com.binance.connector.client.derivatives_trading_portfolio_margin.rest.model.MarginAccountRepayDebtRequest;
+import com.binance.connector.client.derivatives_trading_portfolio_margin.rest.model.MarginAccountRepayDebtResponse;
+import java.io.IOException;
+
+/** API examples for TradeApi */
+public class MarginAccountRepayDebtExample {
+    private DerivativesTradingPortfolioMarginRestApi api;
+
+    public DerivativesTradingPortfolioMarginRestApi getApi() {
+        if (api == null) {
+            ClientConfiguration clientConfiguration =
+                    DerivativesTradingPortfolioMarginRestApiUtil.getClientConfiguration();
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new DerivativesTradingPortfolioMarginRestApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Margin Account Repay Debt (TRADE)
+     *
+     * <p>Repay debt for a margin loan. Weight(IP): 3000 Security Type: TRADE Notes: - The repay
+     * asset amount cannot exceed 50000 USD equivalent value for a single request. - If
+     * &#x60;amount&#x60; is not sent, all the asset loan will be repaid if having enough specific
+     * repay assets. - If &#x60;amount&#x60; is sent, only the certain amount of the asset loan will
+     * be repaid if having enough specific repay assets. - The system will use the same asset to
+     * repay the loan first (if have) no matter whether put the asset in
+     * &#x60;specifyRepayAssets&#x60;
+     *
+     * @throws ApiException if the Api call fails
+     */
+    public void marginAccountRepayDebtExample() throws ApiException, IOException {
+        MarginAccountRepayDebtRequest marginAccountRepayDebtRequest =
+                new MarginAccountRepayDebtRequest();
+        marginAccountRepayDebtRequest.asset("USDT");
+        ApiResponse<MarginAccountRepayDebtResponse> response =
+                getApi().marginAccountRepayDebt(marginAccountRepayDebtRequest);
+        System.out.println(response.getData());
+    }
+}

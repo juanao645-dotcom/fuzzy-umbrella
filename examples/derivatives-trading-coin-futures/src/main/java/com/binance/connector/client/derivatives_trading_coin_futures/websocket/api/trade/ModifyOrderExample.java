@@ -1,0 +1,93 @@
+package com.binance.connector.client.derivatives_trading_coin_futures.websocket.api.trade;
+
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.common.websocket.configuration.WebSocketClientConfiguration;
+import com.binance.connector.client.derivatives_trading_coin_futures.websocket.api.DerivativesTradingCoinFuturesWebSocketApiUtil;
+import com.binance.connector.client.derivatives_trading_coin_futures.websocket.api.api.DerivativesTradingCoinFuturesWebSocketApi;
+import com.binance.connector.client.derivatives_trading_coin_futures.websocket.api.model.ModifyOrderRequest;
+import com.binance.connector.client.derivatives_trading_coin_futures.websocket.api.model.ModifyOrderResponse;
+import com.binance.connector.client.derivatives_trading_coin_futures.websocket.api.model.Side;
+import java.util.concurrent.CompletableFuture;
+
+/** API examples for TradeApi */
+public class ModifyOrderExample {
+    private DerivativesTradingCoinFuturesWebSocketApi api;
+
+    public DerivativesTradingCoinFuturesWebSocketApi getApi() {
+        if (api == null) {
+            WebSocketClientConfiguration clientConfiguration =
+                    DerivativesTradingCoinFuturesWebSocketApiUtil.getClientConfiguration();
+            // if you want the connection to be auto logged on:
+            // https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/authentication-requests
+            clientConfiguration.setAutoLogon(true);
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("/path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new DerivativesTradingCoinFuturesWebSocketApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Modify Order (TRADE)
+     *
+     * <p>Order modify function, currently only LIMIT order modification is supported, modified
+     * orders will be reordered in the match queue Weight: 1 on 10s order rate
+     * limit(X-MBX-ORDER-COUNT-10S); 1 on 1min order rate limit(X-MBX-ORDER-COUNT-1M); 1 on IP rate
+     * limit(x-mbx-used-weight-1m) Security Type: TRADE Notes: - Either &#x60;orderId&#x60; or
+     * &#x60;origClientOrderId&#x60; must be sent, and the &#x60;orderId&#x60; will prevail if both
+     * are sent. - Both &#x60;quantity&#x60; and &#x60;price&#x60; must be sent. - When the new
+     * &#x60;quantity&#x60; or &#x60;price&#x60; doesn&#39;t satisfy &#x60;PRICE_FILTER&#x60; /
+     * &#x60;PERCENT_FILTER&#x60; / &#x60;LOT_SIZE&#x60;, amendment will be rejected and the order
+     * will stay as it is. - However the order will be cancelled by the amendment in the following
+     * situations: - when the order is in partially filled status and the new &#x60;quantity&#x60;
+     * &lt;&#x3D; &#x60;executedQty&#x60; - When the order is &#x60;GTX&#x60; and the new price will
+     * cause it to be executed immediately - One order can only be modified for less than 10000
+     * times.
+     */
+    public void modifyOrderExampleAsync() {
+        ModifyOrderRequest modifyOrderRequest = new ModifyOrderRequest();
+        modifyOrderRequest.symbol("BTCUSD_PERP");
+        modifyOrderRequest.side(Side.BUY);
+        modifyOrderRequest.quantity(1.0d);
+        modifyOrderRequest.price(1.0d);
+        CompletableFuture<ModifyOrderResponse> future = getApi().modifyOrder(modifyOrderRequest);
+        future.handle(
+                (response, error) -> {
+                    if (error != null) {
+                        System.err.println(error);
+                    }
+                    System.out.println(response);
+                    return response;
+                });
+    }
+
+    /**
+     * Modify Order (TRADE)
+     *
+     * <p>Order modify function, currently only LIMIT order modification is supported, modified
+     * orders will be reordered in the match queue Weight: 1 on 10s order rate
+     * limit(X-MBX-ORDER-COUNT-10S); 1 on 1min order rate limit(X-MBX-ORDER-COUNT-1M); 1 on IP rate
+     * limit(x-mbx-used-weight-1m) Security Type: TRADE Notes: - Either &#x60;orderId&#x60; or
+     * &#x60;origClientOrderId&#x60; must be sent, and the &#x60;orderId&#x60; will prevail if both
+     * are sent. - Both &#x60;quantity&#x60; and &#x60;price&#x60; must be sent. - When the new
+     * &#x60;quantity&#x60; or &#x60;price&#x60; doesn&#39;t satisfy &#x60;PRICE_FILTER&#x60; /
+     * &#x60;PERCENT_FILTER&#x60; / &#x60;LOT_SIZE&#x60;, amendment will be rejected and the order
+     * will stay as it is. - However the order will be cancelled by the amendment in the following
+     * situations: - when the order is in partially filled status and the new &#x60;quantity&#x60;
+     * &lt;&#x3D; &#x60;executedQty&#x60; - When the order is &#x60;GTX&#x60; and the new price will
+     * cause it to be executed immediately - One order can only be modified for less than 10000
+     * times.
+     */
+    public void modifyOrderExampleSync() {
+        ModifyOrderRequest modifyOrderRequest = new ModifyOrderRequest();
+        modifyOrderRequest.symbol("BTCUSD_PERP");
+        modifyOrderRequest.side(Side.BUY);
+        modifyOrderRequest.quantity(1.0d);
+        modifyOrderRequest.price(1.0d);
+        CompletableFuture<ModifyOrderResponse> future = getApi().modifyOrder(modifyOrderRequest);
+        ModifyOrderResponse response = future.join();
+        System.out.println(response);
+    }
+}

@@ -1,0 +1,70 @@
+package com.binance.connector.client.spot.websocket.api.market;
+
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.common.websocket.configuration.WebSocketClientConfiguration;
+import com.binance.connector.client.spot.websocket.api.SpotWebSocketApiUtil;
+import com.binance.connector.client.spot.websocket.api.api.SpotWebSocketApi;
+import com.binance.connector.client.spot.websocket.api.model.TickerTradingDayRequest;
+import com.binance.connector.client.spot.websocket.api.model.TickerTradingDayResponse;
+import java.util.concurrent.CompletableFuture;
+
+/** API examples for MarketApi */
+public class TickerTradingDayExample {
+    private SpotWebSocketApi api;
+
+    public SpotWebSocketApi getApi() {
+        if (api == null) {
+            WebSocketClientConfiguration clientConfiguration =
+                    SpotWebSocketApiUtil.getClientConfiguration();
+            // if you want the connection to be auto logged on:
+            // https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/authentication-requests
+            clientConfiguration.setAutoLogon(true);
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("/path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new SpotWebSocketApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Trading Day Ticker
+     *
+     * <p>Price change statistics for a trading day. Weight: 4 for each requested symbol regardless
+     * of windowSize. The weight for this request will cap at 200 once the number of symbols in the
+     * request is more than 50. Security Type: NONE Notes: **Data Source:** Database **Notes:** *
+     * Supported values for &#x60;timeZone&#x60;: * Hours and minutes (e.g. &#x60;-1:00&#x60;,
+     * &#x60;05:45&#x60;) * Only hours (e.g. &#x60;0&#x60;, &#x60;8&#x60;, &#x60;4&#x60;)
+     */
+    public void tickerTradingDayExampleAsync() {
+        TickerTradingDayRequest tickerTradingDayRequest = new TickerTradingDayRequest();
+        CompletableFuture<TickerTradingDayResponse> future =
+                getApi().tickerTradingDay(tickerTradingDayRequest);
+        future.handle(
+                (response, error) -> {
+                    if (error != null) {
+                        System.err.println(error);
+                    }
+                    System.out.println(response);
+                    return response;
+                });
+    }
+
+    /**
+     * Trading Day Ticker
+     *
+     * <p>Price change statistics for a trading day. Weight: 4 for each requested symbol regardless
+     * of windowSize. The weight for this request will cap at 200 once the number of symbols in the
+     * request is more than 50. Security Type: NONE Notes: **Data Source:** Database **Notes:** *
+     * Supported values for &#x60;timeZone&#x60;: * Hours and minutes (e.g. &#x60;-1:00&#x60;,
+     * &#x60;05:45&#x60;) * Only hours (e.g. &#x60;0&#x60;, &#x60;8&#x60;, &#x60;4&#x60;)
+     */
+    public void tickerTradingDayExampleSync() {
+        TickerTradingDayRequest tickerTradingDayRequest = new TickerTradingDayRequest();
+        CompletableFuture<TickerTradingDayResponse> future =
+                getApi().tickerTradingDay(tickerTradingDayRequest);
+        TickerTradingDayResponse response = future.join();
+        System.out.println(response);
+    }
+}
