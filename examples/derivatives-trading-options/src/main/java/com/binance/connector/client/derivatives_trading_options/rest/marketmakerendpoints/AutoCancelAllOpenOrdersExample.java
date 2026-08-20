@@ -1,0 +1,49 @@
+package com.binance.connector.client.derivatives_trading_options.rest.marketmakerendpoints;
+
+import com.binance.connector.client.common.ApiException;
+import com.binance.connector.client.common.ApiResponse;
+import com.binance.connector.client.common.configuration.ClientConfiguration;
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.derivatives_trading_options.rest.DerivativesTradingOptionsRestApiUtil;
+import com.binance.connector.client.derivatives_trading_options.rest.api.DerivativesTradingOptionsRestApi;
+import com.binance.connector.client.derivatives_trading_options.rest.model.AutoCancelAllOpenOrdersRequest;
+import com.binance.connector.client.derivatives_trading_options.rest.model.AutoCancelAllOpenOrdersResponse;
+import java.io.IOException;
+
+/** API examples for MarketMakerEndpointsApi */
+public class AutoCancelAllOpenOrdersExample {
+    private DerivativesTradingOptionsRestApi api;
+
+    public DerivativesTradingOptionsRestApi getApi() {
+        if (api == null) {
+            ClientConfiguration clientConfiguration =
+                    DerivativesTradingOptionsRestApiUtil.getClientConfiguration();
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new DerivativesTradingOptionsRestApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Auto-Cancel All Open Orders (Kill-Switch) Heartbeat (TRADE)
+     *
+     * <p>This endpoint resets the time from which the countdown will begin to the time this
+     * messaged is received. It should be called repeatedly as heartbeats. Multiple heartbeats can
+     * be updated at once by specifying the underlying symbols as a list (ex. BTCUSDT,ETHUSDT) in
+     * the underlyings parameter. Weight(IP): 10 Security Type: TRADE Notes: - The response will
+     * only include underlying symbols where the heartbeat has been successfully updated.
+     *
+     * @throws ApiException if the Api call fails
+     */
+    public void autoCancelAllOpenOrdersExample() throws ApiException, IOException {
+        AutoCancelAllOpenOrdersRequest autoCancelAllOpenOrdersRequest =
+                new AutoCancelAllOpenOrdersRequest();
+        autoCancelAllOpenOrdersRequest.underlyings("BTCUSDT,ETHUSDT");
+        ApiResponse<AutoCancelAllOpenOrdersResponse> response =
+                getApi().autoCancelAllOpenOrders(autoCancelAllOpenOrdersRequest);
+        System.out.println(response.getData());
+    }
+}

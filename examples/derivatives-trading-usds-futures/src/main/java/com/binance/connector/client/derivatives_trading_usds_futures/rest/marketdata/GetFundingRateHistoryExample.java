@@ -1,0 +1,49 @@
+package com.binance.connector.client.derivatives_trading_usds_futures.rest.marketdata;
+
+import com.binance.connector.client.common.ApiException;
+import com.binance.connector.client.common.ApiResponse;
+import com.binance.connector.client.common.configuration.ClientConfiguration;
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.derivatives_trading_usds_futures.rest.DerivativesTradingUsdsFuturesRestApiUtil;
+import com.binance.connector.client.derivatives_trading_usds_futures.rest.api.DerivativesTradingUsdsFuturesRestApi;
+import com.binance.connector.client.derivatives_trading_usds_futures.rest.model.GetFundingRateHistoryResponse;
+import java.io.IOException;
+
+/** API examples for MarketDataApi */
+public class GetFundingRateHistoryExample {
+    private DerivativesTradingUsdsFuturesRestApi api;
+
+    public DerivativesTradingUsdsFuturesRestApi getApi() {
+        if (api == null) {
+            ClientConfiguration clientConfiguration =
+                    DerivativesTradingUsdsFuturesRestApiUtil.getClientConfiguration();
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new DerivativesTradingUsdsFuturesRestApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Get Funding Rate History
+     *
+     * <p>Get Funding Rate History Weight: share 500/5min/IP rate limit with GET
+     * /fapi/v1/fundingInfo Notes: - If &#x60;startTime&#x60; and &#x60;endTime&#x60; are not sent,
+     * the most recent 200 records are returned. - If the number of data between
+     * &#x60;startTime&#x60; and &#x60;endTime&#x60; is larger than &#x60;limit&#x60;, return as
+     * &#x60;startTime&#x60; + &#x60;limit&#x60;. - In ascending order.
+     *
+     * @throws ApiException if the Api call fails
+     */
+    public void getFundingRateHistoryExample() throws ApiException, IOException {
+        String symbol = "BTCUSDT";
+        Long startTime = 1623319461670L;
+        Long endTime = 1641782889000L;
+        Long limit = 50L;
+        ApiResponse<GetFundingRateHistoryResponse> response =
+                getApi().getFundingRateHistory(symbol, startTime, endTime, limit);
+        System.out.println(response.getData());
+    }
+}

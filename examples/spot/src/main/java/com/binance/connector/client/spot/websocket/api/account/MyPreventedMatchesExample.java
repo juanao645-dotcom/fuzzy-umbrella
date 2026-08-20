@@ -1,0 +1,78 @@
+package com.binance.connector.client.spot.websocket.api.account;
+
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.common.websocket.configuration.WebSocketClientConfiguration;
+import com.binance.connector.client.spot.websocket.api.SpotWebSocketApiUtil;
+import com.binance.connector.client.spot.websocket.api.api.SpotWebSocketApi;
+import com.binance.connector.client.spot.websocket.api.model.MyPreventedMatchesRequest;
+import com.binance.connector.client.spot.websocket.api.model.MyPreventedMatchesResponse;
+import java.util.concurrent.CompletableFuture;
+
+/** API examples for AccountApi */
+public class MyPreventedMatchesExample {
+    private SpotWebSocketApi api;
+
+    public SpotWebSocketApi getApi() {
+        if (api == null) {
+            WebSocketClientConfiguration clientConfiguration =
+                    SpotWebSocketApiUtil.getClientConfiguration();
+            // if you want the connection to be auto logged on:
+            // https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/authentication-requests
+            clientConfiguration.setAutoLogon(true);
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("/path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new SpotWebSocketApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Account prevented matches (USER_DATA)
+     *
+     * <p>Displays the list of orders that were expired due to STP. These are the combinations
+     * supported: * &#x60;symbol&#x60; + &#x60;preventedMatchId&#x60; * &#x60;symbol&#x60; +
+     * &#x60;orderId&#x60; * &#x60;symbol&#x60; + &#x60;orderId&#x60; +
+     * &#x60;fromPreventedMatchId&#x60; (&#x60;limit&#x60; will default to 500) * &#x60;symbol&#x60;
+     * + &#x60;orderId&#x60; + &#x60;fromPreventedMatchId&#x60; + &#x60;limit&#x60; Weight: Case |
+     * Weight ---- | ----- If &#x60;symbol&#x60; is invalid | 2 Querying by
+     * &#x60;preventedMatchId&#x60; | 2 Querying by &#x60;orderId&#x60; | 20 Security Type:
+     * USER_DATA Notes: **Data Source:** Database
+     */
+    public void myPreventedMatchesExampleAsync() {
+        MyPreventedMatchesRequest myPreventedMatchesRequest = new MyPreventedMatchesRequest();
+        myPreventedMatchesRequest.symbol("BNBUSDT");
+        CompletableFuture<MyPreventedMatchesResponse> future =
+                getApi().myPreventedMatches(myPreventedMatchesRequest);
+        future.handle(
+                (response, error) -> {
+                    if (error != null) {
+                        System.err.println(error);
+                    }
+                    System.out.println(response);
+                    return response;
+                });
+    }
+
+    /**
+     * Account prevented matches (USER_DATA)
+     *
+     * <p>Displays the list of orders that were expired due to STP. These are the combinations
+     * supported: * &#x60;symbol&#x60; + &#x60;preventedMatchId&#x60; * &#x60;symbol&#x60; +
+     * &#x60;orderId&#x60; * &#x60;symbol&#x60; + &#x60;orderId&#x60; +
+     * &#x60;fromPreventedMatchId&#x60; (&#x60;limit&#x60; will default to 500) * &#x60;symbol&#x60;
+     * + &#x60;orderId&#x60; + &#x60;fromPreventedMatchId&#x60; + &#x60;limit&#x60; Weight: Case |
+     * Weight ---- | ----- If &#x60;symbol&#x60; is invalid | 2 Querying by
+     * &#x60;preventedMatchId&#x60; | 2 Querying by &#x60;orderId&#x60; | 20 Security Type:
+     * USER_DATA Notes: **Data Source:** Database
+     */
+    public void myPreventedMatchesExampleSync() {
+        MyPreventedMatchesRequest myPreventedMatchesRequest = new MyPreventedMatchesRequest();
+        myPreventedMatchesRequest.symbol("BNBUSDT");
+        CompletableFuture<MyPreventedMatchesResponse> future =
+                getApi().myPreventedMatches(myPreventedMatchesRequest);
+        MyPreventedMatchesResponse response = future.join();
+        System.out.println(response);
+    }
+}

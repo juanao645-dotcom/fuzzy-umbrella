@@ -1,0 +1,66 @@
+package com.binance.connector.client.derivatives_trading_usds_futures.websocket.api.marketdata;
+
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.common.websocket.configuration.WebSocketClientConfiguration;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.api.DerivativesTradingUsdsFuturesWebSocketApiUtil;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.api.api.DerivativesTradingUsdsFuturesWebSocketApi;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.api.model.SymbolPriceTickerRequest;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.api.model.SymbolPriceTickerResponse;
+import java.util.concurrent.CompletableFuture;
+
+/** API examples for MarketDataApi */
+public class SymbolPriceTickerExample {
+    private DerivativesTradingUsdsFuturesWebSocketApi api;
+
+    public DerivativesTradingUsdsFuturesWebSocketApi getApi() {
+        if (api == null) {
+            WebSocketClientConfiguration clientConfiguration =
+                    DerivativesTradingUsdsFuturesWebSocketApiUtil.getClientConfiguration();
+            // if you want the connection to be auto logged on:
+            // https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/authentication-requests
+            clientConfiguration.setAutoLogon(true);
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("/path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new DerivativesTradingUsdsFuturesWebSocketApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Symbol Price Ticker
+     *
+     * <p>Latest price for a symbol or symbols. Weight: **1** for a single symbol; **2** when the
+     * symbol parameter is omitted Notes: - If the symbol is not sent, prices for all symbols will
+     * be returned in an array.
+     */
+    public void symbolPriceTickerExampleAsync() {
+        SymbolPriceTickerRequest symbolPriceTickerRequest = new SymbolPriceTickerRequest();
+        CompletableFuture<SymbolPriceTickerResponse> future =
+                getApi().symbolPriceTicker(symbolPriceTickerRequest);
+        future.handle(
+                (response, error) -> {
+                    if (error != null) {
+                        System.err.println(error);
+                    }
+                    System.out.println(response);
+                    return response;
+                });
+    }
+
+    /**
+     * Symbol Price Ticker
+     *
+     * <p>Latest price for a symbol or symbols. Weight: **1** for a single symbol; **2** when the
+     * symbol parameter is omitted Notes: - If the symbol is not sent, prices for all symbols will
+     * be returned in an array.
+     */
+    public void symbolPriceTickerExampleSync() {
+        SymbolPriceTickerRequest symbolPriceTickerRequest = new SymbolPriceTickerRequest();
+        CompletableFuture<SymbolPriceTickerResponse> future =
+                getApi().symbolPriceTicker(symbolPriceTickerRequest);
+        SymbolPriceTickerResponse response = future.join();
+        System.out.println(response);
+    }
+}
