@@ -1,0 +1,48 @@
+package com.binance.connector.client.derivatives_trading_coin_futures.rest.trade;
+
+import com.binance.connector.client.common.ApiException;
+import com.binance.connector.client.common.ApiResponse;
+import com.binance.connector.client.common.configuration.ClientConfiguration;
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.derivatives_trading_coin_futures.rest.DerivativesTradingCoinFuturesRestApiUtil;
+import com.binance.connector.client.derivatives_trading_coin_futures.rest.api.DerivativesTradingCoinFuturesRestApi;
+import com.binance.connector.client.derivatives_trading_coin_futures.rest.model.ChangeMarginTypeRequest;
+import com.binance.connector.client.derivatives_trading_coin_futures.rest.model.ChangeMarginTypeResponse;
+import com.binance.connector.client.derivatives_trading_coin_futures.rest.model.MarginType;
+import java.io.IOException;
+
+/** API examples for TradeApi */
+public class ChangeMarginTypeExample {
+    private DerivativesTradingCoinFuturesRestApi api;
+
+    public DerivativesTradingCoinFuturesRestApi getApi() {
+        if (api == null) {
+            ClientConfiguration clientConfiguration =
+                    DerivativesTradingCoinFuturesRestApiUtil.getClientConfiguration();
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new DerivativesTradingCoinFuturesRestApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Change Margin Type (TRADE)
+     *
+     * <p>Change user&#39;s margin type in the specific symbol market.For Hedge Mode, LONG and SHORT
+     * positions of one symbol use the same margin type. With ISOLATED margin type, margins of the
+     * LONG and SHORT positions are isolated from each other. Weight(IP): 1 Security Type: TRADE
+     *
+     * @throws ApiException if the Api call fails
+     */
+    public void changeMarginTypeExample() throws ApiException, IOException {
+        ChangeMarginTypeRequest changeMarginTypeRequest = new ChangeMarginTypeRequest();
+        changeMarginTypeRequest.symbol("BTCUSD_200925");
+        changeMarginTypeRequest.marginType(MarginType.ISOLATED);
+        ApiResponse<ChangeMarginTypeResponse> response =
+                getApi().changeMarginType(changeMarginTypeRequest);
+        System.out.println(response.getData());
+    }
+}

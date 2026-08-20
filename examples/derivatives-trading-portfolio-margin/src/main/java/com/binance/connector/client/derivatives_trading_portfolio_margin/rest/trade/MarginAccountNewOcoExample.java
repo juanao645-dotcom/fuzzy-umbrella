@@ -1,0 +1,53 @@
+package com.binance.connector.client.derivatives_trading_portfolio_margin.rest.trade;
+
+import com.binance.connector.client.common.ApiException;
+import com.binance.connector.client.common.ApiResponse;
+import com.binance.connector.client.common.configuration.ClientConfiguration;
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.derivatives_trading_portfolio_margin.rest.DerivativesTradingPortfolioMarginRestApiUtil;
+import com.binance.connector.client.derivatives_trading_portfolio_margin.rest.api.DerivativesTradingPortfolioMarginRestApi;
+import com.binance.connector.client.derivatives_trading_portfolio_margin.rest.model.MarginAccountNewOcoRequest;
+import com.binance.connector.client.derivatives_trading_portfolio_margin.rest.model.MarginAccountNewOcoResponse;
+import com.binance.connector.client.derivatives_trading_portfolio_margin.rest.model.Side;
+import java.io.IOException;
+
+/** API examples for TradeApi */
+public class MarginAccountNewOcoExample {
+    private DerivativesTradingPortfolioMarginRestApi api;
+
+    public DerivativesTradingPortfolioMarginRestApi getApi() {
+        if (api == null) {
+            ClientConfiguration clientConfiguration =
+                    DerivativesTradingPortfolioMarginRestApiUtil.getClientConfiguration();
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new DerivativesTradingPortfolioMarginRestApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Margin Account New OCO (TRADE)
+     *
+     * <p>Send in a new OCO for a margin account Weight(IP): 1 Security Type: TRADE Notes: - Other
+     * Info: - Price Restrictions: - &#x60;SELL&#x60;: Limit Price &gt; Last Price &gt; Stop Price -
+     * &#x60;BUY&#x60;: Limit Price * Quantity Restrictions: - Both legs must have the same quantity
+     * - &#x60;ICEBERG&#x60; quantities however do not have to be the same. - Order Rate Limit -
+     * &#x60;OCO&#x60; counts as 2 orders against the order rate limit.
+     *
+     * @throws ApiException if the Api call fails
+     */
+    public void marginAccountNewOcoExample() throws ApiException, IOException {
+        MarginAccountNewOcoRequest marginAccountNewOcoRequest = new MarginAccountNewOcoRequest();
+        marginAccountNewOcoRequest.symbol("LTCBTC");
+        marginAccountNewOcoRequest.side(Side.BUY);
+        marginAccountNewOcoRequest.quantity(1.0d);
+        marginAccountNewOcoRequest.price(1.0d);
+        marginAccountNewOcoRequest.stopPrice(1.0d);
+        ApiResponse<MarginAccountNewOcoResponse> response =
+                getApi().marginAccountNewOco(marginAccountNewOcoRequest);
+        System.out.println(response.getData());
+    }
+}

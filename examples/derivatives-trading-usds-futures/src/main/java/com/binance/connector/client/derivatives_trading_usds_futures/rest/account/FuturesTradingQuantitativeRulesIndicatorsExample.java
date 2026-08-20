@@ -1,0 +1,48 @@
+package com.binance.connector.client.derivatives_trading_usds_futures.rest.account;
+
+import com.binance.connector.client.common.ApiException;
+import com.binance.connector.client.common.ApiResponse;
+import com.binance.connector.client.common.configuration.ClientConfiguration;
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.derivatives_trading_usds_futures.rest.DerivativesTradingUsdsFuturesRestApiUtil;
+import com.binance.connector.client.derivatives_trading_usds_futures.rest.api.DerivativesTradingUsdsFuturesRestApi;
+import com.binance.connector.client.derivatives_trading_usds_futures.rest.model.FuturesTradingQuantitativeRulesIndicatorsResponse;
+import java.io.IOException;
+
+/** API examples for AccountApi */
+public class FuturesTradingQuantitativeRulesIndicatorsExample {
+    private DerivativesTradingUsdsFuturesRestApi api;
+
+    public DerivativesTradingUsdsFuturesRestApi getApi() {
+        if (api == null) {
+            ClientConfiguration clientConfiguration =
+                    DerivativesTradingUsdsFuturesRestApiUtil.getClientConfiguration();
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new DerivativesTradingUsdsFuturesRestApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Futures Trading Quantitative Rules Indicators (USER_DATA)
+     *
+     * <p>Futures trading quantitative rules indicators, for more information on this, please refer
+     * to the [Futures Trading Quantitative
+     * Rules](https://www.binance.com/en/support/faq/4f462ebe6ff445d4a170be7d9e897272) Weight: -
+     * **1** for a single symbol - **10** when the symbol parameter is omitted Security Type:
+     * USER_DATA
+     *
+     * @throws ApiException if the Api call fails
+     */
+    public void futuresTradingQuantitativeRulesIndicatorsExample()
+            throws ApiException, IOException {
+        String symbol = "BTCUSDT";
+        Long recvWindow = 5000L;
+        ApiResponse<FuturesTradingQuantitativeRulesIndicatorsResponse> response =
+                getApi().futuresTradingQuantitativeRulesIndicators(symbol, recvWindow);
+        System.out.println(response.getData());
+    }
+}

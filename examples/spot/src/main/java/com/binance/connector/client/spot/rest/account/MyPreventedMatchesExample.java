@@ -1,0 +1,59 @@
+package com.binance.connector.client.spot.rest.account;
+
+import com.binance.connector.client.common.ApiException;
+import com.binance.connector.client.common.ApiResponse;
+import com.binance.connector.client.common.configuration.ClientConfiguration;
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.spot.rest.SpotRestApiUtil;
+import com.binance.connector.client.spot.rest.api.SpotRestApi;
+import com.binance.connector.client.spot.rest.model.MyPreventedMatchesResponse;
+import java.io.IOException;
+
+/** API examples for AccountApi */
+public class MyPreventedMatchesExample {
+    private SpotRestApi api;
+
+    public SpotRestApi getApi() {
+        if (api == null) {
+            ClientConfiguration clientConfiguration = SpotRestApiUtil.getClientConfiguration();
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new SpotRestApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Query Prevented Matches (USER_DATA)
+     *
+     * <p>Displays the list of orders that were expired due to STP. These are the combinations
+     * supported: - &#x60;symbol&#x60; + &#x60;preventedMatchId&#x60; - &#x60;symbol&#x60; +
+     * &#x60;orderId&#x60; - &#x60;symbol&#x60; + &#x60;orderId&#x60; +
+     * &#x60;fromPreventedMatchId&#x60; (&#x60;limit&#x60; will default to 500) - &#x60;symbol&#x60;
+     * + &#x60;orderId&#x60; + &#x60;fromPreventedMatchId&#x60; + &#x60;limit&#x60; Weight: Case |
+     * Weight ---- | ----- If &#x60;symbol&#x60; is invalid | 2 Querying by
+     * &#x60;preventedMatchId&#x60; | 2 Querying by &#x60;orderId&#x60; | 20 Security Type:
+     * USER_DATA Notes: **Data Source:** Database
+     *
+     * @throws ApiException if the Api call fails
+     */
+    public void myPreventedMatchesExample() throws ApiException, IOException {
+        String symbol = "BTCUSDT";
+        Long preventedMatchId = 1L;
+        Long orderId = 1L;
+        Long fromPreventedMatchId = 1L;
+        Integer limit = 1;
+        Double recvWindow = 5000d;
+        ApiResponse<MyPreventedMatchesResponse> response =
+                getApi().myPreventedMatches(
+                                symbol,
+                                preventedMatchId,
+                                orderId,
+                                fromPreventedMatchId,
+                                limit,
+                                recvWindow);
+        System.out.println(response.getData());
+    }
+}

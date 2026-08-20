@@ -1,0 +1,62 @@
+package com.binance.connector.client.sub_account.rest.assetmanagement;
+
+import com.binance.connector.client.common.ApiException;
+import com.binance.connector.client.common.ApiResponse;
+import com.binance.connector.client.common.configuration.ClientConfiguration;
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.sub_account.rest.SubAccountRestApiUtil;
+import com.binance.connector.client.sub_account.rest.api.SubAccountRestApi;
+import com.binance.connector.client.sub_account.rest.model.QueryUniversalTransferHistoryResponse;
+import java.io.IOException;
+
+/** API examples for AssetManagementApi */
+public class QueryUniversalTransferHistoryExample {
+    private SubAccountRestApi api;
+
+    public SubAccountRestApi getApi() {
+        if (api == null) {
+            ClientConfiguration clientConfiguration =
+                    SubAccountRestApiUtil.getClientConfiguration();
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new SubAccountRestApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Query Universal Transfer History (For Master Account) (USER_DATA)
+     *
+     * <p>Query Universal Transfer History Weight(IP): 1 Security Type: USER_DATA Notes: -
+     * &#x60;fromEmail&#x60; and &#x60;toEmail&#x60; cannot be sent at the same time. - If both
+     * &#x60;fromEmail&#x60; and &#x60;toEmail&#x60; are omitted, records with &#x60;fromEmail&#x60;
+     * equal to the master account are returned by default. - The query time range must be less than
+     * 7 days. - If &#x60;startTime&#x60; and &#x60;endTime&#x60; are omitted, records from the last
+     * 7 days are returned by default.
+     *
+     * @throws ApiException if the Api call fails
+     */
+    public void queryUniversalTransferHistoryExample() throws ApiException, IOException {
+        String fromEmail = "abctest@gmail.com";
+        String toEmail = "deftest@gmail.com";
+        String clientTranId = "1";
+        Long startTime = 1623319461670L;
+        Long endTime = 1641782889000L;
+        Long page = 1L;
+        Long limit = 10L;
+        Long recvWindow = 5000L;
+        ApiResponse<QueryUniversalTransferHistoryResponse> response =
+                getApi().queryUniversalTransferHistory(
+                                fromEmail,
+                                toEmail,
+                                clientTranId,
+                                startTime,
+                                endTime,
+                                page,
+                                limit,
+                                recvWindow);
+        System.out.println(response.getData());
+    }
+}

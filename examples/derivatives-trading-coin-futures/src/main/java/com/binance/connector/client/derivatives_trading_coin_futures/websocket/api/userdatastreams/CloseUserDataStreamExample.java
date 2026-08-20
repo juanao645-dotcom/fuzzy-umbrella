@@ -1,0 +1,62 @@
+package com.binance.connector.client.derivatives_trading_coin_futures.websocket.api.userdatastreams;
+
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.common.websocket.configuration.WebSocketClientConfiguration;
+import com.binance.connector.client.derivatives_trading_coin_futures.websocket.api.DerivativesTradingCoinFuturesWebSocketApiUtil;
+import com.binance.connector.client.derivatives_trading_coin_futures.websocket.api.api.DerivativesTradingCoinFuturesWebSocketApi;
+import com.binance.connector.client.derivatives_trading_coin_futures.websocket.api.model.CloseUserDataStreamRequest;
+import com.binance.connector.client.derivatives_trading_coin_futures.websocket.api.model.CloseUserDataStreamResponse;
+import java.util.concurrent.CompletableFuture;
+
+/** API examples for UserDataStreamsApi */
+public class CloseUserDataStreamExample {
+    private DerivativesTradingCoinFuturesWebSocketApi api;
+
+    public DerivativesTradingCoinFuturesWebSocketApi getApi() {
+        if (api == null) {
+            WebSocketClientConfiguration clientConfiguration =
+                    DerivativesTradingCoinFuturesWebSocketApiUtil.getClientConfiguration();
+            // if you want the connection to be auto logged on:
+            // https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/authentication-requests
+            clientConfiguration.setAutoLogon(true);
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("/path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new DerivativesTradingCoinFuturesWebSocketApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Close User Data Stream (USER_STREAM)
+     *
+     * <p>Close out a user data stream. Weight(IP): 1 Security Type: USER_STREAM
+     */
+    public void closeUserDataStreamExampleAsync() {
+        CloseUserDataStreamRequest closeUserDataStreamRequest = new CloseUserDataStreamRequest();
+        CompletableFuture<CloseUserDataStreamResponse> future =
+                getApi().closeUserDataStream(closeUserDataStreamRequest);
+        future.handle(
+                (response, error) -> {
+                    if (error != null) {
+                        System.err.println(error);
+                    }
+                    System.out.println(response);
+                    return response;
+                });
+    }
+
+    /**
+     * Close User Data Stream (USER_STREAM)
+     *
+     * <p>Close out a user data stream. Weight(IP): 1 Security Type: USER_STREAM
+     */
+    public void closeUserDataStreamExampleSync() {
+        CloseUserDataStreamRequest closeUserDataStreamRequest = new CloseUserDataStreamRequest();
+        CompletableFuture<CloseUserDataStreamResponse> future =
+                getApi().closeUserDataStream(closeUserDataStreamRequest);
+        CloseUserDataStreamResponse response = future.join();
+        System.out.println(response);
+    }
+}

@@ -1,0 +1,39 @@
+package com.binance.connector.client.derivatives_trading_options.rest.marketmakerblocktrade;
+
+import com.binance.connector.client.common.ApiException;
+import com.binance.connector.client.common.configuration.ClientConfiguration;
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.derivatives_trading_options.rest.DerivativesTradingOptionsRestApiUtil;
+import com.binance.connector.client.derivatives_trading_options.rest.api.DerivativesTradingOptionsRestApi;
+import java.io.IOException;
+
+/** API examples for MarketMakerBlockTradeApi */
+public class CancelBlockTradeOrderExample {
+    private DerivativesTradingOptionsRestApi api;
+
+    public DerivativesTradingOptionsRestApi getApi() {
+        if (api == null) {
+            ClientConfiguration clientConfiguration =
+                    DerivativesTradingOptionsRestApiUtil.getClientConfiguration();
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new DerivativesTradingOptionsRestApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Cancel Block Trade Order (TRADE)
+     *
+     * <p>Cancel a block trade order. Weight(IP): 5 Security Type: TRADE
+     *
+     * @throws ApiException if the Api call fails
+     */
+    public void cancelBlockTradeOrderExample() throws ApiException, IOException {
+        String blockOrderMatchingKey = "7d046e6e-a429-4335-ab9d-6a681febcde5";
+        Long recvWindow = 5000L;
+        getApi().cancelBlockTradeOrder(blockOrderMatchingKey, recvWindow);
+    }
+}
