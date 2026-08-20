@@ -1,0 +1,66 @@
+package com.binance.connector.client.margin_trading.rest.borrowrepay;
+
+import com.binance.connector.client.common.ApiException;
+import com.binance.connector.client.common.ApiResponse;
+import com.binance.connector.client.common.configuration.ClientConfiguration;
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.margin_trading.rest.MarginTradingRestApiUtil;
+import com.binance.connector.client.margin_trading.rest.api.MarginTradingRestApi;
+import com.binance.connector.client.margin_trading.rest.model.GetInterestHistoryResponse;
+import java.io.IOException;
+
+/** API examples for BorrowRepayApi */
+public class GetInterestHistoryExample {
+    private MarginTradingRestApi api;
+
+    public MarginTradingRestApi getApi() {
+        if (api == null) {
+            ClientConfiguration clientConfiguration =
+                    MarginTradingRestApiUtil.getClientConfiguration();
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new MarginTradingRestApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Get Interest History (USER_DATA)
+     *
+     * <p>Get Interest History Weight(IP): 1 Security Type: USER_DATA Notes: - Response in
+     * descending order - If isolatedSymbol is not sent, crossed margin data will be returned - The
+     * max interval between &#x60;startTime&#x60; and &#x60;endTime&#x60; is 30 days. It is a MUST
+     * to ensure data correctness. - If &#x60;startTime&#x60;and &#x60;endTime&#x60; not sent,
+     * return records of the last 7 days by default. - If &#x60;startTime&#x60; is sent and
+     * &#x60;endTime&#x60; is not sent, return records of [max(&#x60;startTime&#x60;, now-30d),
+     * now]. - If &#x60;startTime&#x60; is not sent and &#x60;endTime&#x60; is sent, return records
+     * of [&#x60;endTime&#x60;-7, &#x60;endTime&#x60;] - &#x60;type&#x60; in response has 4 enums: -
+     * &#x60;PERIODIC&#x60; interest charged per hour - &#x60;ON_BORROW&#x60; first interest charged
+     * on borrow - &#x60;PERIODIC_CONVERTED&#x60; interest charged per hour converted into BNB -
+     * &#x60;ON_BORROW_CONVERTED&#x60; first interest charged on borrow converted into BNB -
+     * &#x60;PORTFOLIO&#x60; interest charged daily on the portfolio margin negative balance
+     *
+     * @throws ApiException if the Api call fails
+     */
+    public void getInterestHistoryExample() throws ApiException, IOException {
+        String asset = "USDT";
+        String isolatedSymbol = "BNBUSDT";
+        Long startTime = 1623319461670L;
+        Long endTime = 1641782889000L;
+        Long current = 1L;
+        Long size = 10L;
+        Long recvWindow = 5000L;
+        ApiResponse<GetInterestHistoryResponse> response =
+                getApi().getInterestHistory(
+                                asset,
+                                isolatedSymbol,
+                                startTime,
+                                endTime,
+                                current,
+                                size,
+                                recvWindow);
+        System.out.println(response.getData());
+    }
+}

@@ -1,0 +1,54 @@
+package com.binance.connector.client.derivatives_trading_portfolio_margin.rest.trade;
+
+import com.binance.connector.client.common.ApiException;
+import com.binance.connector.client.common.ApiResponse;
+import com.binance.connector.client.common.configuration.ClientConfiguration;
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.derivatives_trading_portfolio_margin.rest.DerivativesTradingPortfolioMarginRestApiUtil;
+import com.binance.connector.client.derivatives_trading_portfolio_margin.rest.api.DerivativesTradingPortfolioMarginRestApi;
+import com.binance.connector.client.derivatives_trading_portfolio_margin.rest.model.NewUmOrderRequest;
+import com.binance.connector.client.derivatives_trading_portfolio_margin.rest.model.NewUmOrderResponse;
+import com.binance.connector.client.derivatives_trading_portfolio_margin.rest.model.OrderType;
+import com.binance.connector.client.derivatives_trading_portfolio_margin.rest.model.Side;
+import java.io.IOException;
+
+/** API examples for TradeApi */
+public class NewUmOrderExample {
+    private DerivativesTradingPortfolioMarginRestApi api;
+
+    public DerivativesTradingPortfolioMarginRestApi getApi() {
+        if (api == null) {
+            ClientConfiguration clientConfiguration =
+                    DerivativesTradingPortfolioMarginRestApiUtil.getClientConfiguration();
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new DerivativesTradingPortfolioMarginRestApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * New UM Order (TRADE)
+     *
+     * <p>Place new UM order Weight(IP): 1 Security Type: TRADE Notes: - Additional mandatory
+     * parameters based on type: - If &#x60;newOrderRespType&#x60; is sent as &#x60;RESULT&#x60; : -
+     * &#x60;MARKET&#x60; order: the final FILLED result of the order will be return directly. -
+     * &#x60;LIMIT&#x60; order with special &#x60;timeInForce&#x60;: the final status result of the
+     * order(FILLED or EXPIRED) will be returned directly. - &#x60;selfTradePreventionMode&#x60; is
+     * only effective when &#x60;timeInForce&#x60; set to &#x60;IOC&#x60; or &#x60;GTC&#x60; or
+     * &#x60;GTD&#x60;. - In extreme market conditions, timeInForce &#x60;GTD&#x60; order auto
+     * cancel time might be delayed comparing to &#x60;goodTillDate&#x60;
+     *
+     * @throws ApiException if the Api call fails
+     */
+    public void newUmOrderExample() throws ApiException, IOException {
+        NewUmOrderRequest newUmOrderRequest = new NewUmOrderRequest();
+        newUmOrderRequest.symbol("BTCUSDT");
+        newUmOrderRequest.side(Side.BUY);
+        newUmOrderRequest.type(OrderType.LIMIT);
+        ApiResponse<NewUmOrderResponse> response = getApi().newUmOrder(newUmOrderRequest);
+        System.out.println(response.getData());
+    }
+}

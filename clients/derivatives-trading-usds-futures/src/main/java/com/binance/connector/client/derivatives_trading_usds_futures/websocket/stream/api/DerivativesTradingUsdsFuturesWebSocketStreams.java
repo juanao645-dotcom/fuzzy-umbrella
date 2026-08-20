@@ -1,0 +1,283 @@
+package com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.api;
+
+import com.binance.connector.client.common.ApiException;
+import com.binance.connector.client.common.SystemUtil;
+import com.binance.connector.client.common.websocket.adapter.stream.StreamConnectionInterface;
+import com.binance.connector.client.common.websocket.adapter.stream.StreamConnectionPoolWrapper;
+import com.binance.connector.client.common.websocket.adapter.stream.StreamConnectionWrapper;
+import com.binance.connector.client.common.websocket.configuration.WebSocketClientConfiguration;
+import com.binance.connector.client.common.websocket.dtos.RequestWrapperDTO;
+import com.binance.connector.client.common.websocket.service.StreamBlockingQueue;
+import com.binance.connector.client.common.websocket.service.StreamBlockingQueueWrapper;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.JSON;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.AggregateTradeStreamsRequest;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.AggregateTradeStreamsResponse;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.AllBookTickersStreamRequest;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.AllBookTickersStreamResponse;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.AllMarketLiquidationOrderStreamsRequest;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.AllMarketLiquidationOrderStreamsResponse;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.AllMarketMiniTickersStreamRequest;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.AllMarketMiniTickersStreamResponse;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.AllMarketTickersStreamsRequest;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.AllMarketTickersStreamsResponse;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.AssetIndexRequest;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.AssetIndexResponse;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.CompositeIndexSymbolInformationStreamsRequest;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.CompositeIndexSymbolInformationStreamsResponse;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.ContinuousContractKlineCandlestickStreamsRequest;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.ContinuousContractKlineCandlestickStreamsResponse;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.ContractInfoStreamRequest;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.ContractInfoStreamResponse;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.DiffBookDepthStreamsRequest;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.DiffBookDepthStreamsResponse;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.IndividualSymbolBookTickerStreamsRequest;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.IndividualSymbolBookTickerStreamsResponse;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.IndividualSymbolMiniTickerStreamRequest;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.IndividualSymbolMiniTickerStreamResponse;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.IndividualSymbolTickerStreamsRequest;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.IndividualSymbolTickerStreamsResponse;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.KlineCandlestickStreamsRequest;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.KlineCandlestickStreamsResponse;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.LiquidationOrderStreamsRequest;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.LiquidationOrderStreamsResponse;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.MarkPriceStreamForAllMarketRequest;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.MarkPriceStreamForAllMarketResponse;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.MarkPriceStreamRequest;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.MarkPriceStreamResponse;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.PartialBookDepthStreamsRequest;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.PartialBookDepthStreamsResponse;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.RpiDiffBookDepthStreamsRequest;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.RpiDiffBookDepthStreamsResponse;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.TradingSessionStreamRequest;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.TradingSessionStreamResponse;
+import com.binance.connector.client.derivatives_trading_usds_futures.websocket.stream.model.UserDataStreamEventsResponse;
+import com.google.gson.reflect.TypeToken;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
+public class DerivativesTradingUsdsFuturesWebSocketStreams {
+    private static final String USER_AGENT =
+            String.format(
+                    "binance-derivatives-trading-usds-futures/12.0.1 (Java/%s; %s; %s)",
+                    SystemUtil.getJavaVersion(), SystemUtil.getOs(), SystemUtil.getArch());
+
+    private WebSocketClientConfiguration clientConfiguration;
+    private StreamConnectionInterface connection;
+
+    private MarketApi marketApi;
+    private PublicApi publicApi;
+
+    public DerivativesTradingUsdsFuturesWebSocketStreams(
+            WebSocketClientConfiguration configuration) {
+        this.clientConfiguration = configuration;
+    }
+
+    public StreamConnectionInterface getConnection() {
+        if (connection == null) {
+            WebSocketClientConfiguration configuration =
+                    (WebSocketClientConfiguration) clientConfiguration.clone();
+            if (configuration.getUrl().endsWith("/stream")
+                    && !configuration.getUrl().endsWith("/private/stream")) {
+                configuration.setUrl(configuration.getUrl().replace("/stream", "/private/stream"));
+            }
+            connection =
+                    clientConfiguration.getUsePool()
+                            ? new StreamConnectionPoolWrapper(clientConfiguration, JSON.getGson())
+                            : new StreamConnectionWrapper(clientConfiguration, JSON.getGson());
+        }
+        return connection;
+    }
+
+    public void stop() throws Exception {
+        if (connection != null && connection.isConnected()) {
+            connection.stop();
+        }
+
+        if (marketApi != null && marketApi.getConnection().isConnected()) {
+            marketApi.getConnection().stop();
+        }
+
+        if (publicApi != null && publicApi.getConnection().isConnected()) {
+            publicApi.getConnection().stop();
+        }
+    }
+
+    public MarketApi getMarketApi() {
+        if (marketApi == null) {
+            WebSocketClientConfiguration configuration =
+                    (WebSocketClientConfiguration) clientConfiguration.clone();
+            if (configuration.getUrl().endsWith("/stream")
+                    && !configuration.getUrl().endsWith("/market/stream")) {
+                configuration.setUrl(configuration.getUrl().replace("/stream", "/market/stream"));
+            }
+            marketApi = new MarketApi(configuration);
+        }
+        return marketApi;
+    }
+
+    public PublicApi getPublicApi() {
+        if (publicApi == null) {
+            WebSocketClientConfiguration configuration =
+                    (WebSocketClientConfiguration) clientConfiguration.clone();
+            if (configuration.getUrl().endsWith("/stream")
+                    && !configuration.getUrl().endsWith("/public/stream")) {
+                configuration.setUrl(configuration.getUrl().replace("/stream", "/public/stream"));
+            }
+            publicApi = new PublicApi(configuration);
+        }
+        return publicApi;
+    }
+
+    public StreamBlockingQueueWrapper<AggregateTradeStreamsResponse> aggregateTradeStreams(
+            AggregateTradeStreamsRequest aggregateTradeStreamsRequest) throws ApiException {
+        return getMarketApi().aggregateTradeStreams(aggregateTradeStreamsRequest);
+    }
+
+    public StreamBlockingQueueWrapper<AllMarketLiquidationOrderStreamsResponse>
+            allMarketLiquidationOrderStreams(
+                    AllMarketLiquidationOrderStreamsRequest allMarketLiquidationOrderStreamsRequest)
+                    throws ApiException {
+        return getMarketApi()
+                .allMarketLiquidationOrderStreams(allMarketLiquidationOrderStreamsRequest);
+    }
+
+    public StreamBlockingQueueWrapper<AllMarketMiniTickersStreamResponse>
+            allMarketMiniTickersStream(
+                    AllMarketMiniTickersStreamRequest allMarketMiniTickersStreamRequest)
+                    throws ApiException {
+        return getMarketApi().allMarketMiniTickersStream(allMarketMiniTickersStreamRequest);
+    }
+
+    public StreamBlockingQueueWrapper<AllMarketTickersStreamsResponse> allMarketTickersStreams(
+            AllMarketTickersStreamsRequest allMarketTickersStreamsRequest) throws ApiException {
+        return getMarketApi().allMarketTickersStreams(allMarketTickersStreamsRequest);
+    }
+
+    public StreamBlockingQueueWrapper<AssetIndexResponse> assetIndex(
+            AssetIndexRequest assetIndexRequest) throws ApiException {
+        return getMarketApi().assetIndex(assetIndexRequest);
+    }
+
+    public StreamBlockingQueueWrapper<CompositeIndexSymbolInformationStreamsResponse>
+            compositeIndexSymbolInformationStreams(
+                    CompositeIndexSymbolInformationStreamsRequest
+                            compositeIndexSymbolInformationStreamsRequest)
+                    throws ApiException {
+        return getMarketApi()
+                .compositeIndexSymbolInformationStreams(
+                        compositeIndexSymbolInformationStreamsRequest);
+    }
+
+    public StreamBlockingQueueWrapper<ContinuousContractKlineCandlestickStreamsResponse>
+            continuousContractKlineCandlestickStreams(
+                    ContinuousContractKlineCandlestickStreamsRequest
+                            continuousContractKlineCandlestickStreamsRequest)
+                    throws ApiException {
+        return getMarketApi()
+                .continuousContractKlineCandlestickStreams(
+                        continuousContractKlineCandlestickStreamsRequest);
+    }
+
+    public StreamBlockingQueueWrapper<ContractInfoStreamResponse> contractInfoStream(
+            ContractInfoStreamRequest contractInfoStreamRequest) throws ApiException {
+        return getMarketApi().contractInfoStream(contractInfoStreamRequest);
+    }
+
+    public StreamBlockingQueueWrapper<IndividualSymbolMiniTickerStreamResponse>
+            individualSymbolMiniTickerStream(
+                    IndividualSymbolMiniTickerStreamRequest individualSymbolMiniTickerStreamRequest)
+                    throws ApiException {
+        return getMarketApi()
+                .individualSymbolMiniTickerStream(individualSymbolMiniTickerStreamRequest);
+    }
+
+    public StreamBlockingQueueWrapper<IndividualSymbolTickerStreamsResponse>
+            individualSymbolTickerStreams(
+                    IndividualSymbolTickerStreamsRequest individualSymbolTickerStreamsRequest)
+                    throws ApiException {
+        return getMarketApi().individualSymbolTickerStreams(individualSymbolTickerStreamsRequest);
+    }
+
+    public StreamBlockingQueueWrapper<KlineCandlestickStreamsResponse> klineCandlestickStreams(
+            KlineCandlestickStreamsRequest klineCandlestickStreamsRequest) throws ApiException {
+        return getMarketApi().klineCandlestickStreams(klineCandlestickStreamsRequest);
+    }
+
+    public StreamBlockingQueueWrapper<LiquidationOrderStreamsResponse> liquidationOrderStreams(
+            LiquidationOrderStreamsRequest liquidationOrderStreamsRequest) throws ApiException {
+        return getMarketApi().liquidationOrderStreams(liquidationOrderStreamsRequest);
+    }
+
+    public StreamBlockingQueueWrapper<MarkPriceStreamResponse> markPriceStream(
+            MarkPriceStreamRequest markPriceStreamRequest) throws ApiException {
+        return getMarketApi().markPriceStream(markPriceStreamRequest);
+    }
+
+    public StreamBlockingQueueWrapper<MarkPriceStreamForAllMarketResponse>
+            markPriceStreamForAllMarket(
+                    MarkPriceStreamForAllMarketRequest markPriceStreamForAllMarketRequest)
+                    throws ApiException {
+        return getMarketApi().markPriceStreamForAllMarket(markPriceStreamForAllMarketRequest);
+    }
+
+    public StreamBlockingQueueWrapper<TradingSessionStreamResponse> tradingSessionStream(
+            TradingSessionStreamRequest tradingSessionStreamRequest) throws ApiException {
+        return getMarketApi().tradingSessionStream(tradingSessionStreamRequest);
+    }
+
+    public StreamBlockingQueueWrapper<AllBookTickersStreamResponse> allBookTickersStream(
+            AllBookTickersStreamRequest allBookTickersStreamRequest) throws ApiException {
+        return getPublicApi().allBookTickersStream(allBookTickersStreamRequest);
+    }
+
+    public StreamBlockingQueueWrapper<DiffBookDepthStreamsResponse> diffBookDepthStreams(
+            DiffBookDepthStreamsRequest diffBookDepthStreamsRequest) throws ApiException {
+        return getPublicApi().diffBookDepthStreams(diffBookDepthStreamsRequest);
+    }
+
+    public StreamBlockingQueueWrapper<IndividualSymbolBookTickerStreamsResponse>
+            individualSymbolBookTickerStreams(
+                    IndividualSymbolBookTickerStreamsRequest
+                            individualSymbolBookTickerStreamsRequest)
+                    throws ApiException {
+        return getPublicApi()
+                .individualSymbolBookTickerStreams(individualSymbolBookTickerStreamsRequest);
+    }
+
+    public StreamBlockingQueueWrapper<PartialBookDepthStreamsResponse> partialBookDepthStreams(
+            PartialBookDepthStreamsRequest partialBookDepthStreamsRequest) throws ApiException {
+        return getPublicApi().partialBookDepthStreams(partialBookDepthStreamsRequest);
+    }
+
+    public StreamBlockingQueueWrapper<RpiDiffBookDepthStreamsResponse> rpiDiffBookDepthStreams(
+            RpiDiffBookDepthStreamsRequest rpiDiffBookDepthStreamsRequest) throws ApiException {
+        return getPublicApi().rpiDiffBookDepthStreams(rpiDiffBookDepthStreamsRequest);
+    }
+
+    /**
+     * Subscribes to the user data WebSocket stream using the provided listen key.
+     *
+     * @param listenKey - The listen key for the user data WebSocket stream.
+     * @return A WebSocket stream handler for the user data stream.
+     */
+    public StreamBlockingQueueWrapper<UserDataStreamEventsResponse> userData(String listenKey) {
+        RequestWrapperDTO<Set<String>, Object> requestWrapperDTO =
+                new RequestWrapperDTO.Builder<Set<String>, Object>()
+                        .id(getRequestID())
+                        .method("SUBSCRIBE")
+                        .params(Collections.singleton(listenKey))
+                        .build();
+        Map<String, StreamBlockingQueue<String>> queuesMap =
+                getConnection().subscribe(requestWrapperDTO);
+
+        TypeToken<UserDataStreamEventsResponse> typeToken = new TypeToken<>() {};
+        StreamBlockingQueue<String> queue = queuesMap.get(listenKey);
+        return new StreamBlockingQueueWrapper<>(queue, typeToken, JSON.getGson());
+    }
+
+    public String getRequestID() {
+        return UUID.randomUUID().toString();
+    }
+}

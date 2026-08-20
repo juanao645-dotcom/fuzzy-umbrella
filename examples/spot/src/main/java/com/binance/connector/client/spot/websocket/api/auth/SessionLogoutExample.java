@@ -1,0 +1,65 @@
+package com.binance.connector.client.spot.websocket.api.auth;
+
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.common.websocket.configuration.WebSocketClientConfiguration;
+import com.binance.connector.client.spot.websocket.api.SpotWebSocketApiUtil;
+import com.binance.connector.client.spot.websocket.api.api.SpotWebSocketApi;
+import com.binance.connector.client.spot.websocket.api.model.SessionLogoutResponse;
+import java.util.concurrent.CompletableFuture;
+
+/** API examples for AuthApi */
+public class SessionLogoutExample {
+    private SpotWebSocketApi api;
+
+    public SpotWebSocketApi getApi() {
+        if (api == null) {
+            WebSocketClientConfiguration clientConfiguration =
+                    SpotWebSocketApiUtil.getClientConfiguration();
+            // if you want the connection to be auto logged on:
+            // https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/authentication-requests
+            clientConfiguration.setAutoLogon(true);
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("/path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new SpotWebSocketApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Log out of the session
+     *
+     * <p>Forget the API key previously authenticated. If the connection is not authenticated, this
+     * request does nothing. Note that the WebSocket connection stays open after
+     * &#x60;session.logout&#x60; request. You can continue using the connection, but now you will
+     * have to explicitly provide the &#x60;apiKey&#x60; and &#x60;signature&#x60; parameters where
+     * needed. Weight(IP): 2 Security Type: NONE Notes: **Data Source:** Memory
+     */
+    public void sessionLogoutExampleAsync() {
+        CompletableFuture<SessionLogoutResponse> future = getApi().sessionLogout();
+        future.handle(
+                (response, error) -> {
+                    if (error != null) {
+                        System.err.println(error);
+                    }
+                    System.out.println(response);
+                    return response;
+                });
+    }
+
+    /**
+     * Log out of the session
+     *
+     * <p>Forget the API key previously authenticated. If the connection is not authenticated, this
+     * request does nothing. Note that the WebSocket connection stays open after
+     * &#x60;session.logout&#x60; request. You can continue using the connection, but now you will
+     * have to explicitly provide the &#x60;apiKey&#x60; and &#x60;signature&#x60; parameters where
+     * needed. Weight(IP): 2 Security Type: NONE Notes: **Data Source:** Memory
+     */
+    public void sessionLogoutExampleSync() {
+        CompletableFuture<SessionLogoutResponse> future = getApi().sessionLogout();
+        SessionLogoutResponse response = future.join();
+        System.out.println(response);
+    }
+}

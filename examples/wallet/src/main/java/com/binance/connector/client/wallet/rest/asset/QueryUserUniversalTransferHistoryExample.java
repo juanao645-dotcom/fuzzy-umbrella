@@ -1,0 +1,63 @@
+package com.binance.connector.client.wallet.rest.asset;
+
+import com.binance.connector.client.common.ApiException;
+import com.binance.connector.client.common.ApiResponse;
+import com.binance.connector.client.common.configuration.ClientConfiguration;
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.wallet.rest.WalletRestApiUtil;
+import com.binance.connector.client.wallet.rest.api.WalletRestApi;
+import com.binance.connector.client.wallet.rest.model.FromSymbol;
+import com.binance.connector.client.wallet.rest.model.QueryUserUniversalTransferHistoryResponse;
+import com.binance.connector.client.wallet.rest.model.ToSymbol;
+import java.io.IOException;
+
+/** API examples for AssetApi */
+public class QueryUserUniversalTransferHistoryExample {
+    private WalletRestApi api;
+
+    public WalletRestApi getApi() {
+        if (api == null) {
+            ClientConfiguration clientConfiguration = WalletRestApiUtil.getClientConfiguration();
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new WalletRestApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Query User Universal Transfer History (USER_DATA)
+     *
+     * <p>Query User Universal Transfer History Weight(IP): 1 Security Type: USER_DATA Notes: -
+     * &#x60;fromSymbol&#x60; must be sent when type are ISOLATEDMARGIN_MARGIN and
+     * ISOLATEDMARGIN_ISOLATEDMARGIN - &#x60;toSymbol&#x60; must be sent when type are
+     * MARGIN_ISOLATEDMARGIN and ISOLATEDMARGIN_ISOLATEDMARGIN - Support query within the last 6
+     * months only - If &#x60;startTime&#x60;and &#x60;endTime&#x60; not sent, return records of the
+     * last 7 days by default
+     *
+     * @throws ApiException if the Api call fails
+     */
+    public void queryUserUniversalTransferHistoryExample() throws ApiException, IOException {
+        String type = "";
+        Long startTime = 1623319461670L;
+        Long endTime = 1641782889000L;
+        Long current = 1L;
+        Long size = 10L;
+        FromSymbol fromSymbol = FromSymbol.ISOLATEDMARGIN_MARGIN;
+        ToSymbol toSymbol = ToSymbol.MARGIN_ISOLATEDMARGIN;
+        Long recvWindow = 5000L;
+        ApiResponse<QueryUserUniversalTransferHistoryResponse> response =
+                getApi().queryUserUniversalTransferHistory(
+                                type,
+                                startTime,
+                                endTime,
+                                current,
+                                size,
+                                fromSymbol,
+                                toSymbol,
+                                recvWindow);
+        System.out.println(response.getData());
+    }
+}

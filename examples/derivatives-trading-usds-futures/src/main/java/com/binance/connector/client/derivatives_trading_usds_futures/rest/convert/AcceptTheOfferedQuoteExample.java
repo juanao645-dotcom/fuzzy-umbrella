@@ -1,0 +1,45 @@
+package com.binance.connector.client.derivatives_trading_usds_futures.rest.convert;
+
+import com.binance.connector.client.common.ApiException;
+import com.binance.connector.client.common.ApiResponse;
+import com.binance.connector.client.common.configuration.ClientConfiguration;
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.derivatives_trading_usds_futures.rest.DerivativesTradingUsdsFuturesRestApiUtil;
+import com.binance.connector.client.derivatives_trading_usds_futures.rest.api.DerivativesTradingUsdsFuturesRestApi;
+import com.binance.connector.client.derivatives_trading_usds_futures.rest.model.AcceptTheOfferedQuoteRequest;
+import com.binance.connector.client.derivatives_trading_usds_futures.rest.model.AcceptTheOfferedQuoteResponse;
+import java.io.IOException;
+
+/** API examples for ConvertApi */
+public class AcceptTheOfferedQuoteExample {
+    private DerivativesTradingUsdsFuturesRestApi api;
+
+    public DerivativesTradingUsdsFuturesRestApi getApi() {
+        if (api == null) {
+            ClientConfiguration clientConfiguration =
+                    DerivativesTradingUsdsFuturesRestApiUtil.getClientConfiguration();
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new DerivativesTradingUsdsFuturesRestApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Accept the offered quote (USER_DATA)
+     *
+     * <p>Accept the offered quote by quote ID. Weight(IP): 200 Security Type: USER_DATA
+     *
+     * @throws ApiException if the Api call fails
+     */
+    public void acceptTheOfferedQuoteExample() throws ApiException, IOException {
+        AcceptTheOfferedQuoteRequest acceptTheOfferedQuoteRequest =
+                new AcceptTheOfferedQuoteRequest();
+        acceptTheOfferedQuoteRequest.quoteId("1");
+        ApiResponse<AcceptTheOfferedQuoteResponse> response =
+                getApi().acceptTheOfferedQuote(acceptTheOfferedQuoteRequest);
+        System.out.println(response.getData());
+    }
+}
