@@ -1,0 +1,101 @@
+package com.binance.connector.client.spot.websocket.api.trade;
+
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.common.websocket.configuration.WebSocketClientConfiguration;
+import com.binance.connector.client.spot.websocket.api.SpotWebSocketApiUtil;
+import com.binance.connector.client.spot.websocket.api.api.SpotWebSocketApi;
+import com.binance.connector.client.spot.websocket.api.model.AboveType;
+import com.binance.connector.client.spot.websocket.api.model.BelowType;
+import com.binance.connector.client.spot.websocket.api.model.OrderListPlaceOcoRequest;
+import com.binance.connector.client.spot.websocket.api.model.OrderListPlaceOcoResponse;
+import com.binance.connector.client.spot.websocket.api.model.Side;
+import java.util.concurrent.CompletableFuture;
+
+/** API examples for TradeApi */
+public class OrderListPlaceOcoExample {
+    private SpotWebSocketApi api;
+
+    public SpotWebSocketApi getApi() {
+        if (api == null) {
+            WebSocketClientConfiguration clientConfiguration =
+                    SpotWebSocketApiUtil.getClientConfiguration();
+            // if you want the connection to be auto logged on:
+            // https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/authentication-requests
+            clientConfiguration.setAutoLogon(true);
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("/path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new SpotWebSocketApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Place new Order list - OCO (TRADE)
+     *
+     * <p>Send in an one-cancels-the-other (OCO) pair, where activation of one order immediately
+     * cancels the other. * An OCO has 2 orders called the **above order** and **below order**. *
+     * One of the orders must be a &#x60;LIMIT_MAKER/TAKE_PROFIT/TAKE_PROFIT_LIMIT&#x60; order and
+     * the other must be &#x60;STOP_LOSS&#x60; or &#x60;STOP_LOSS_LIMIT&#x60; order. * Price
+     * restrictions: * If the OCO is on the &#x60;SELL&#x60; side: *
+     * &#x60;LIMIT_MAKER/TAKE_PROFIT_LIMIT&#x60; &#x60;price&#x60; &gt; Last Traded Price &gt;
+     * &#x60;STOP_LOSS/STOP_LOSS_LIMIT&#x60; &#x60;stopPrice&#x60; * &#x60;TAKE_PROFIT
+     * stopPrice&#x60; &gt; Last Traded Price &gt; &#x60;STOP_LOSS/STOP_LOSS_LIMIT stopPrice&#x60; *
+     * If the OCO is on the &#x60;BUY&#x60; side: * &#x60;LIMIT_MAKER&#x60; &#x60;price&#x60; &lt;
+     * Last Traded Price &lt; &#x60;STOP_LOSS/STOP_LOSS_LIMIT&#x60; &#x60;stopPrice&#x60; *
+     * &#x60;TAKE_PROFIT stopPrice&#x60; &gt; Last Traded Price &gt; &#x60;STOP_LOSS/STOP_LOSS_LIMIT
+     * stopPrice&#x60; * OCOs add **2 orders** to the &#x60;EXCHANGE_MAX_ORDERS&#x60; filter and
+     * &#x60;MAX_NUM_ORDERS&#x60; filter. Weight(IP): 1 Unfilled Order Count: 2 Security Type: TRADE
+     * Notes: **Data Source:** Matching Engine
+     */
+    public void orderListPlaceOcoExampleAsync() {
+        OrderListPlaceOcoRequest orderListPlaceOcoRequest = new OrderListPlaceOcoRequest();
+        orderListPlaceOcoRequest.symbol("BNBUSDT");
+        orderListPlaceOcoRequest.side(Side.BUY);
+        orderListPlaceOcoRequest.quantity(1d);
+        orderListPlaceOcoRequest.aboveType(AboveType.STOP_LOSS_LIMIT);
+        orderListPlaceOcoRequest.belowType(BelowType.STOP_LOSS);
+        CompletableFuture<OrderListPlaceOcoResponse> future =
+                getApi().orderListPlaceOco(orderListPlaceOcoRequest);
+        future.handle(
+                (response, error) -> {
+                    if (error != null) {
+                        System.err.println(error);
+                    }
+                    System.out.println(response);
+                    return response;
+                });
+    }
+
+    /**
+     * Place new Order list - OCO (TRADE)
+     *
+     * <p>Send in an one-cancels-the-other (OCO) pair, where activation of one order immediately
+     * cancels the other. * An OCO has 2 orders called the **above order** and **below order**. *
+     * One of the orders must be a &#x60;LIMIT_MAKER/TAKE_PROFIT/TAKE_PROFIT_LIMIT&#x60; order and
+     * the other must be &#x60;STOP_LOSS&#x60; or &#x60;STOP_LOSS_LIMIT&#x60; order. * Price
+     * restrictions: * If the OCO is on the &#x60;SELL&#x60; side: *
+     * &#x60;LIMIT_MAKER/TAKE_PROFIT_LIMIT&#x60; &#x60;price&#x60; &gt; Last Traded Price &gt;
+     * &#x60;STOP_LOSS/STOP_LOSS_LIMIT&#x60; &#x60;stopPrice&#x60; * &#x60;TAKE_PROFIT
+     * stopPrice&#x60; &gt; Last Traded Price &gt; &#x60;STOP_LOSS/STOP_LOSS_LIMIT stopPrice&#x60; *
+     * If the OCO is on the &#x60;BUY&#x60; side: * &#x60;LIMIT_MAKER&#x60; &#x60;price&#x60; &lt;
+     * Last Traded Price &lt; &#x60;STOP_LOSS/STOP_LOSS_LIMIT&#x60; &#x60;stopPrice&#x60; *
+     * &#x60;TAKE_PROFIT stopPrice&#x60; &gt; Last Traded Price &gt; &#x60;STOP_LOSS/STOP_LOSS_LIMIT
+     * stopPrice&#x60; * OCOs add **2 orders** to the &#x60;EXCHANGE_MAX_ORDERS&#x60; filter and
+     * &#x60;MAX_NUM_ORDERS&#x60; filter. Weight(IP): 1 Unfilled Order Count: 2 Security Type: TRADE
+     * Notes: **Data Source:** Matching Engine
+     */
+    public void orderListPlaceOcoExampleSync() {
+        OrderListPlaceOcoRequest orderListPlaceOcoRequest = new OrderListPlaceOcoRequest();
+        orderListPlaceOcoRequest.symbol("BNBUSDT");
+        orderListPlaceOcoRequest.side(Side.BUY);
+        orderListPlaceOcoRequest.quantity(1d);
+        orderListPlaceOcoRequest.aboveType(AboveType.STOP_LOSS_LIMIT);
+        orderListPlaceOcoRequest.belowType(BelowType.STOP_LOSS);
+        CompletableFuture<OrderListPlaceOcoResponse> future =
+                getApi().orderListPlaceOco(orderListPlaceOcoRequest);
+        OrderListPlaceOcoResponse response = future.join();
+        System.out.println(response);
+    }
+}

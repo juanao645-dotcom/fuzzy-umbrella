@@ -1,0 +1,47 @@
+package com.binance.connector.client.derivatives_trading_coin_futures.rest.marketdata;
+
+import com.binance.connector.client.common.ApiException;
+import com.binance.connector.client.common.ApiResponse;
+import com.binance.connector.client.common.configuration.ClientConfiguration;
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.derivatives_trading_coin_futures.rest.DerivativesTradingCoinFuturesRestApiUtil;
+import com.binance.connector.client.derivatives_trading_coin_futures.rest.api.DerivativesTradingCoinFuturesRestApi;
+import com.binance.connector.client.derivatives_trading_coin_futures.rest.model.Ticker24hrPriceChangeStatisticsResponse;
+import java.io.IOException;
+
+/** API examples for MarketDataApi */
+public class Ticker24hrPriceChangeStatisticsExample {
+    private DerivativesTradingCoinFuturesRestApi api;
+
+    public DerivativesTradingCoinFuturesRestApi getApi() {
+        if (api == null) {
+            ClientConfiguration clientConfiguration =
+                    DerivativesTradingCoinFuturesRestApiUtil.getClientConfiguration();
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new DerivativesTradingCoinFuturesRestApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * 24hr Ticker Price Change Statistics
+     *
+     * <p>24 hour rolling window price change statistics. Weight: **1** for a single symbol, **40**
+     * when the symbol parameter is omitted **Careful** when accessing this with no symbol. Notes: -
+     * Symbol and pair cannot be sent together - If a pair is sent,tickers for all symbols of the
+     * pair will be returned - If either a pair or symbol is sent, tickers for all symbols of all
+     * pairs will be returned
+     *
+     * @throws ApiException if the Api call fails
+     */
+    public void ticker24hrPriceChangeStatisticsExample() throws ApiException, IOException {
+        String symbol = "BTCUSD_200925";
+        String pair = "BTCUSD";
+        ApiResponse<Ticker24hrPriceChangeStatisticsResponse> response =
+                getApi().ticker24hrPriceChangeStatistics(symbol, pair);
+        System.out.println(response.getData());
+    }
+}

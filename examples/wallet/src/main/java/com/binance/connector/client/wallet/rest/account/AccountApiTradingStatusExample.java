@@ -1,0 +1,41 @@
+package com.binance.connector.client.wallet.rest.account;
+
+import com.binance.connector.client.common.ApiException;
+import com.binance.connector.client.common.ApiResponse;
+import com.binance.connector.client.common.configuration.ClientConfiguration;
+import com.binance.connector.client.common.configuration.SignatureConfiguration;
+import com.binance.connector.client.wallet.rest.WalletRestApiUtil;
+import com.binance.connector.client.wallet.rest.api.WalletRestApi;
+import com.binance.connector.client.wallet.rest.model.AccountApiTradingStatusResponse;
+import java.io.IOException;
+
+/** API examples for AccountApi */
+public class AccountApiTradingStatusExample {
+    private WalletRestApi api;
+
+    public WalletRestApi getApi() {
+        if (api == null) {
+            ClientConfiguration clientConfiguration = WalletRestApiUtil.getClientConfiguration();
+            SignatureConfiguration signatureConfiguration = new SignatureConfiguration();
+            signatureConfiguration.setApiKey("apiKey");
+            signatureConfiguration.setPrivateKey("path/to/private.key");
+            clientConfiguration.setSignatureConfiguration(signatureConfiguration);
+            api = new WalletRestApi(clientConfiguration);
+        }
+        return api;
+    }
+
+    /**
+     * Account API Trading Status (USER_DATA)
+     *
+     * <p>Fetch account api trading status detail. Weight(IP): 1 Security Type: USER_DATA
+     *
+     * @throws ApiException if the Api call fails
+     */
+    public void accountApiTradingStatusExample() throws ApiException, IOException {
+        Long recvWindow = 5000L;
+        ApiResponse<AccountApiTradingStatusResponse> response =
+                getApi().accountApiTradingStatus(recvWindow);
+        System.out.println(response.getData());
+    }
+}
